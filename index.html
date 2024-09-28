@@ -128,64 +128,14 @@ input[type=text] {
 
         <!-- Toolbar for formatting -->
         <div id="toolbar" style="display: none;">
-            <li><button onclick="execCmd('formatBlock', false, 'p')">Paragraph</button>
-                    <li><button onclick="execCmd('bold')">Bold</button>
-                    <li><button onclick="execCmd('italic')">Italic</button>
-                    <li><button onclick="execCmd('underline')">Underline</button>
-                    <li><button onclick="execCmd('justifyLeft')">Left</button>
-                    <li><button onclick="execCmd('justifyCenter')">Center</button>
-                    <li><button onclick="execCmd('justifyRight')">Right</button>
-                    <li><button onclick="execCmd('insertOrderedList')">Ordered List</button>
-                        <button onclick="createList('insertOrderedList', 'upper-alpha')">Upper Alpha List</button>
-                        <button onclick="createList('insertOrderedList', 'lower-alpha')">Lower Alpha List</button>
-                        <button onclick="createList('insertOrderedList', 'upper-roman')">Upper Roman List</button>
-                        <button onclick="createList('insertOrderedList', 'lower-roman')">Lower Roman List</button>
-                        <button onclick="createList('insertUnorderedList', 'disc')">Disc Bullets List</button>
-                        <button onclick="createList('insertUnorderedList', 'circle')">Circle Bullets List</button>
-                        <button onclick="createList('insertUnorderedList', 'square')">Square Bullets List</button>
-                        
-                        <!-- Corrected button for disc list -->
-                        <button onclick="execCmd('insertUnorderedList', 'disc')">Disc List</button>
-                        
-                    <li><button onclick="execCmd('superscript')">x<sup>2</sup></button>
-                    <li><button onclick="execCmd('subscript')">x<sub>2</sub></button>
-                    <li><button onclick="insertTable()">Table</button>
-                    <li><button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
-                    <li><button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
-                    <li><button onclick="insertContentDiv3()"><div class="color-content2">center paragraph Heading 2</div></button>
-                    <li><button onclick="insertPC3()"><div class="color-content3">Main Paragraph  3</div></button>
-                    <li><button onclick="insertPC4()"><div class="color-content4">Paragraph bold 4</div></button>
-                    <li><button onclick="insertPC5()"><div class="color-content5">Type 5</div></button>
-                    <li><button onclick="insertPC6()"><div class="color-content6">Not Id Type point 6</div></button>
-                    <li><button onclick="insertPC6()"><div class="color-content6">Type point 6</div></button>
-                    <li><button onclick="insertPC7()"><div class="color-content7">Type to type line 7</div></button>
-                    <li><button onclick="insertPC8()"><div class="color-content8">Type to type  point 8</div></button>
-                    <li><button onclick="insertPEXC()"><div class="color-content9">Example</div></button>
-                    <li><button onclick="insertOLC()"><div class="color-content5">Order list</div></button>
-                    <li><button onclick="insertUOLC()"><div class="color-content5">Unoder list</div> </button>
-                    <li><button onclick="insertBGCC1()"><div class="pink-background"> Bg pink</div></button>
-                    <li><button onclick="insertBGCC2()"><div class="blue-background">Bg blue</div></button>
-                    <li><button onclick="insertBGCC3()"><div class="blue1-background">Bg blue1</div></button>
-                    <li><button onclick="insertBGCC4()"><div class="green-background">Bg green</div></button>
-                    <li><button onclick="insertBGCC5()"><div class="yellow-background">Bg yellow</div></button>
-                    <li><button onclick="insertBGCC6()"><div class="orange-background">Bg orange</div></button>
-                    <li><button onclick="insertCR()">Column/Row</button>
-                    <li><button onclick="insertCR1()">Column/Row 1</button>
-                        <li><button onclick="insertLineBreaks()">One Line Break</button>
-                            <li><button onclick="formatHTML()">Format HTML</button></li>
-                            <li></li><li></li><br><br></ul>
-                </div>
-            </ul>
-        </div>
-    </div>
-    
-        <div class="converter-container"><div class="container" > <input type="text" id="findText" placeholder="Find">
-            <input type="text" id="replaceText" placeholder="Replace">
-            <button onclick="findAndReplace()">Replace</button>
-            <div id="textEditor" contenteditable="true" oninput="updateOutput()" onkeydown="handleKeyDown(event)"></div>
-            <textarea id="output" placeholder="HTML code will appear here..." oninput="updateTextEditor()"></textarea>
-        </div>
-    </div>
+            <button onclick="execCmd('bold')">Bold</button>
+            <button onclick="execCmd('justifyLeft')">Left</button>
+            <button onclick="execCmd('justifyCenter')">Center</button>
+            <button onclick="execCmd('justifyRight')">Right</button>
+            <button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
+             <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
+                   
+            
         </div>
 
         <!-- Content editor -->
@@ -469,6 +419,22 @@ input[type=text] {
 
 
 <script>
+
+ function insertContentDiv1() {
+            var html = `<h1 id="${document.getSelection()}"><b class="color-content1">${document.getSelection()}</b></h1>`;
+                document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertContentDiv2() {
+            var html = `<h2 id="${document.getSelection()}"><b class="color-content1">${document.getSelection()}</b></h1>`;
+                document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+    
     function execCmd(command, value = null) {
         document.execCommand(command, false, value);
         updateOutput();
@@ -480,6 +446,7 @@ input[type=text] {
     }
 
     document.getElementById('editor').addEventListener('input', updateOutput);
+    
 </script>
 <script>
 
