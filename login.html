@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-container input {
+            width: calc(100% - 50px);
+        }
+        .password-container button {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            color: #007bff;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error, .success {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .forgot-password a {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFH1SGy9Gc7JJZhTLv2bktvTE4q_mSU3M",
+            authDomain: "gklearnstudyy.firebaseapp.com",
+            projectId: "gklearnstudyy",
+            storageBucket: "gklearnstudyy.appspot.com",
+            messagingSenderId: "256328121620",
+            appId: "1:256328121620:web:6de8ba9ae25e83c4875601"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const loginForm = document.getElementById('loginForm');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const showPasswordButton = document.getElementById('showPasswordButton');
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+            // Prevent password from being cached after back navigation
+            if (performance.getEntriesByType("navigation")[0].type === 'back_forward') {
+                passwordInput.value = '';
+            }
+
+            // Toggle show/hide password
+            showPasswordButton.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    showPasswordButton.textContent = 'Hide';
+                } else {
+                    passwordInput.type = 'password';
+                    showPasswordButton.textContent = 'Show';
+                }
+            });
+
+            // Handle login form submission
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = passwordInput.value;
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        window.location.href = 'admin.html'; // Redirect to admin page on success
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        let errorMessageText;
+                        if (errorCode === 'auth/wrong-password') {
+                            errorMessageText = 'Incorrect password. Please try again.';
+                        } else if (errorCode === 'auth/user-not-found') {
+                            errorMessageText = 'No user found with this email.';
+                        } else {
+                            errorMessageText = error.message;
+                        }
+                        errorMessage.textContent = errorMessageText;
+                    });
+            });
+
+            // Handle forgot password
+            forgotPasswordLink.addEventListener('click', function() {
+                const email = document.getElementById('email').value;
+                if (!email) {
+                    errorMessage.textContent = 'Please enter your email address to reset your password.';
+                    return;
+                }
+
+                sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        successMessage.textContent = 'Password reset email sent. Check your inbox.';
+                        errorMessage.textContent = ''; // Clear error message if successful
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        if (errorCode === 'auth/user-not-found') {
+                            errorMessage.textContent = 'No user found with this email.';
+                        } else {
+                            errorMessage.textContent = error.message;
+                        }
+                    });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm" autocomplete="off">
+            <input type="email" placeholder="Email" id="email" required autocomplete="off">
+            <div class="password-container">
+                <input type="password" placeholder="Password" id="password" required autocomplete="off">
+                <button type="button" id="showPasswordButton">Show</button>
+            </div>
+            <button type="submit">Login</button>
+            <div class="error" id="errorMessage"></div>
+            <div class="success" id="successMessage"></div>
+            <div class="forgot-password">
+                <a id="forgotPasswordLink">Forgot Password?</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
