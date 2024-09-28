@@ -26,7 +26,7 @@
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: fixed;
-            top: 0;
+            top: -5px;
             left: 0;
            
         } #themeToggle {z-index: 11;position: fixed;top: 12px;right: 100px;padding: 0px 0px;border: none;cursor: pointer;border-radius: 50%;font-size: 16px;display: flex;align-items: center;gap: 10px;}
@@ -113,12 +113,12 @@
 <body>
 
     <div class="header">
-        <button id="createPostButton">Create a New Post</button>
+        <button id="createPostButton">Create Post</button>
         <button style="margin-left: 52%;" id="logoutButton">Logout</button>
     </div>
 
     <div class="admin-container">
-        <h2>Admin Panel</h2>
+       
 
         <!-- Title Input -->
         <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
@@ -357,10 +357,10 @@
                     postElement.appendChild(editButton);
                     postsContainer.appendChild(postElement);
                     previewButton.style.float = 'right';
-                    previewButton.style.marginTop = '-10px';
+                    previewButton.style.marginTop = '-25px';
                     previewButton.style.padding = '5px';
                     editButton.style.float = 'right';
-                    editButton.style.marginTop = '-10px';
+                    editButton.style.marginTop = '-25px';
                     editButton.style.marginRight = '5px';
                     editButton.style.padding = '5px';
                 }
