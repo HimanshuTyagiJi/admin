@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -239,9 +238,8 @@
         function updateOutput() {
             const content = editorContainer.innerHTML;
             const title = postTitleInput.value;
-            
-            generatedHTML.innerText = `${dynamicTags}\n${content}`;
             const dynamicTags = generateDynamicTags(title);
+            generatedHTML.innerText = `${dynamicTags}\n${content}`;
             generatedHTML.style.display = 'block';
         }
 
