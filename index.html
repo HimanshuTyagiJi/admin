@@ -352,7 +352,7 @@
                         `<h3>${post.title}</h3>
                         <postcontent>${post.content}</postcontent>
                         <status>Status: ${post.status === "none" ? "Draft" : post.status}</status>
-                        <div>Posted by: ${post.userName}</div>`; // Show username
+                        `; 
                     postElement.appendChild(previewButton);
                     postElement.appendChild(editButton);
                     postsContainer.appendChild(postElement);
