@@ -1,0 +1,193 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .post {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Owner Panel</h2>
+    <div id="posts"></div>
+    <button onclick="logout()">Logout</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, updateDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFH1SGy9Gc7JJZhTLv2bktvTE4q_mSU3M",
+            authDomain: "gklearnstudyy.firebaseapp.com",
+            projectId: "gklearnstudyy",
+            storageBucket: "gklearnstudyy.appspot.com",
+            messagingSenderId: "256328121620",
+            appId: "1:256328121620:web:6de8ba9ae25e83c4875601"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Load posts in descending order
+        async function loadPosts() {
+            const postsContainer = document.getElementById('posts');
+            postsContainer.innerHTML = ''; // Clear existing posts
+
+            // Get posts ordered by most recent
+            const postsSnapshot = await getDocs(query(collection(db, "posts"), orderBy("createdAt", "desc")));
+            postsSnapshot.forEach(doc => {
+                const post = doc.data();
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <div>${post.content}</div>
+                    <p><strong>Submitted by:</strong> ${post.userName || 'Unknown'}</p>
+                    <p>Status: ${post.status}</p>
+                    <button onclick="acceptPost('${doc.id}', '${post.title}', '${encodeURIComponent(post.content)}', '${post.userName || 'Unknown'}')">Accept</button>
+                    <button onclick="rejectPost('${doc.id}')">Reject</button>
+                    <button onclick="previewPost('${post.title}', '${encodeURIComponent(post.content)}', '${post.userName || 'Unknown'}')">Preview</button>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        // Accept the post and commit to GitHub
+        window.acceptPost = async (postId, title, content, username) => {
+            await updateDoc(doc(db, "posts", postId), { status: "Accepted" });
+            alert("Post accepted!");
+            loadPosts(); // Reload posts
+            commitToGitHub(title, "Accepted", content, username); // Commit to GitHub using the title and HTML content
+        };
+
+        // Reject the post
+        window.rejectPost = async (postId) => {
+            await updateDoc(doc(db, "posts", postId), { status: "Rejected" });
+            alert("Post rejected!");
+            loadPosts(); // Reload posts
+        };
+
+        // Preview the post in a new tab
+        window.previewPost = (title, content, username) => {
+            const dynamicTags = generateDynamicTags(title); // Generate the dynamic tags for the preview
+
+            // Open a new window for preview
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <html>
+                <head>
+                  
+                    <title>${title}</title>
+                   
+                </head>
+                <body>
+                   <div class="container">
+                  
+                        ${decodeURIComponent(content)} 
+                    </div>
+                     ${dynamicTags}
+                </body>
+                </html>
+            `);
+            previewWindow.document.close(); // Close the document to render it
+        };
+
+        // Logout and clear session
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html'; // Redirect to login page
+        }
+
+        // Commit the post to GitHub (with update support)
+        async function commitToGitHub(title, action, content, username) {
+            const dynamicTags = generateDynamicTags(title);
+            const htmlContent = `
+                <html>
+                <head>
+                   
+                    <title>${title}</title>
+                </head>
+               <div class="container">
+                        ${decodeURIComponent(content)}
+                    </div> ${dynamicTags}
+                </body>
+                </html>
+            `;
+
+            const fileName = `${title.replace(/\s+/g, '_').toLowerCase()}.html`;
+            const url = `https://api.github.com/repos/HimanshuTyagiJi/GKLearnStudy/contents/public/${fileName}`;
+            const token = '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'; // GitHub token (use securely)
+
+            let sha = null;
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    sha = data.sha;
+                }
+            } catch (error) {
+                console.log('File not found or error fetching existing file:', error);
+            }
+
+            const data = {
+                message: `${action} post: ${title}`,
+                content: btoa(htmlContent),
+                ...(sha && { sha })
+            };
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Function to generate dynamic tags for scripts and styles
+        function generateDynamicTags(title) {
+            const prefix = title.split('/').map(() => '..').join('/'); // Generate path based on title
+            const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
+            const scriptTag2 = `<script src="${prefix}/menusearch.js"><\/script>`;
+            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+
+            return `${styleTag}\n${scriptTag1}\n${scriptTag2}`; // Return the complete dynamic tags
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPosts);
+    </script>
+</body>
+</html>
