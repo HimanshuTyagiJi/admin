@@ -115,7 +115,7 @@ input[type=text] {
 </head>
 <body>
 
-   <div class="header">
+  <div class="header">
     <button id="createPostButton">Create Post</button>
     <button style="margin-left: 52%;" id="logoutButton">Logout</button>
 </div>
@@ -183,11 +183,7 @@ input[type=text] {
         const editorContainer = document.getElementById('postContent');
         const generatedHTML = document.getElementById('generatedHTML');
         const previewButton = document.getElementById('previewPost');
-        const editPreviewButton = document.createElement('button');
-        editPreviewButton.id = 'editpreviewPost';
-        editPreviewButton.innerText = 'Preview in New Tab';
-        editPreviewButton.style.display = 'none';
-        document.body.appendChild(editPreviewButton);
+
         const postTitleInput = document.getElementById('postTitle');
         const metaKeywordsInput = document.getElementById('metaKeywords');
         const metaAuthorInput = document.getElementById('metaAuthor');
@@ -212,16 +208,11 @@ input[type=text] {
             submitButton.style.display = 'inline-block';
             previewButton.style.display = 'inline-block';
             saveDraftButton.style.display = 'inline-block';
-            editPreviewButton.style.display = 'none';
             document.getElementById('toolbar').style.display = 'block';
             postsContainer.style.display = 'none';
         });
 
         previewButton.addEventListener('click', function () {
-            previewPost();
-        });
-
-        editPreviewButton.addEventListener('click', function () {
             previewPost();
         });
 
@@ -359,35 +350,55 @@ input[type=text] {
             generatedHTML.style.display = 'none';
             submitButton.style.display = 'none';
             previewButton.style.display = 'none';
-            saveDraftButton.style.display = 'none';
             postsContainer.style.display = 'block';
+            postsContainer.innerHTML = '';
+            loadPosts();
+        }
+
+        function previewPost() {
+            const title = postTitleInput.value;
+            const content = editorContainer.innerHTML;
+
+            if (title && content) {
+                const previewWindow = window.open();
+                previewWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${title}</title>
+                        </head>
+                        <body>
+                            <h1>${title}</h1>
+                            <div>${content}</div>
+                        </body>
+                    </html>
+                `);
+                previewWindow.document.close();
+            } else {
+                alert('Please fill in the title and content before previewing.');
+            }
         }
 
         function previewInNewTab(title, content) {
-            const newWindow = window.open();
-            newWindow.document.write(`
+            const previewWindow = window.open();
+            previewWindow.document.write(`
                 <html>
-                <head>
-                    <title>${title}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; }
-                        h1 { text-align: center; }
-                        .content { margin: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>${title}</h1>
-                    <div class="content">${content}</div>
-                </body>
+                    <head>
+                        <title>${title}</title>
+                    </head>
+                    <body>
+                        <h1>${title}</h1>
+                        <div>${content}</div>
+                    </body>
                 </html>
             `);
-            newWindow.document.close();
+            previewWindow.document.close();
         }
 
         function editPost(postId, title, content) {
             currentEditPostId = postId;
             postTitleInput.value = title;
             editorContainer.innerHTML = content;
+
             postTitleInput.style.display = 'block';
             metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
@@ -395,40 +406,38 @@ input[type=text] {
             editorContainer.style.display = 'block';
             submitButton.style.display = 'inline-block';
             previewButton.style.display = 'inline-block';
-            saveDraftButton.style.display = 'inline-block';
             document.getElementById('toolbar').style.display = 'block';
             postsContainer.style.display = 'none';
         }
 
         function generateDynamicTags(title) {
-            return `<title>${title}</title>
-                    <meta name="keywords" content="${metaKeywordsInput.value}">
-                    <meta name="author" content="${metaAuthorInput.value}">`;
+            return `<meta name="title" content="${title}">\n<meta name="description" content="Post description for ${title}">`;
         }
 
-        function previewPost() {
-            const title = postTitleInput.value;
-            const content = editorContainer.innerHTML;
-            const newWindow = window.open();
-            newWindow.document.write(`
-                <html>
-                <head>
-                    <title>${title}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; }
-                        h1 { text-align: center; }
-                        .content { margin: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>${title}</h1>
-                    <div class="content">${content}</div>
-                </body>
-                </html>
-            `);
-            newWindow.document.close();
+        function insertContentDiv1() {
+            const newElement = document.createElement("h1");
+            newElement.innerHTML = "New Heading 1";
+            document.getElementById('postContent').appendChild(newElement);
+            updateOutput();
+        }
+
+        function insertContentDiv2() {
+            const newElement = document.createElement("h2");
+            newElement.innerHTML = "New Heading 2";
+            document.getElementById('postContent').appendChild(newElement);
+            updateOutput();
         }
     });
+
+    async function handleLogout() {
+        try {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error("Error signing out: ", error);
+        }
+    }
+</script><script>
 
     function insertContentDiv1() {
         execCmd('insertHTML', '<h1>Your Heading Here</h1>');
