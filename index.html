@@ -265,6 +265,8 @@ input[type=text] {
 
     // Set the generated HTML with proper formatting
     generatedHTML.innerText = `
+    <!DOCTYPE html>
+      <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -277,6 +279,7 @@ input[type=text] {
             ${content}
             ${scriptTags}  <!-- Script is placed just before the closing body tag -->
         </body>
+        </html>
     `;
     
     // Ensure the generated HTML is displayed
