@@ -222,31 +222,94 @@ input[type=text] {
             postsContainer.style.display = 'none';
         });
 
-        previewButton.addEventListener('click', function () {
-            const content = editorContainer.innerHTML;
-            const title = postTitleInput.value;
-            const dynamicTags = generateDynamicTags(title);
-            if (content && title) {
-                const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(`<h1>${title}</h1>${dynamicTags}${content}`);
-                previewWindow.document.close();
-            } else {
-                alert('Please fill in the title and content to preview.');
-            }
-        });
+       previewButton.addEventListener('click', function () {
+    const content = editorContainer.innerHTML;  // Get content from the editor
+    const title = postTitleInput.value;         // Get the post title input
 
-        editPreviewButton.addEventListener('click', function () {
-            const content = editorContainer.innerHTML;
-            const title = postTitleInput.value;
-            const dynamicTags = generateDynamicTags(title);
-            if (content && title) {
-                const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(`<h1>${title}</h1>${dynamicTags}${content}`);
-                previewWindow.document.close();
-            } else {
-                alert('Please fill in the title and content to preview.');
-            }
-        });
+    // Check if content and title are filled in
+    if (content && title) {
+        const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
+        const metaAuthor = metaAuthorInput.value;      // Get meta author input
+        
+        // Generate dynamic tags (style and script)
+        const scriptTags = generateDynamicScriptTags(title);  // Get script tags
+        const styleTag = generateDynamicStyleTag(title);      // Get style tag
+
+        // Open the preview window
+        const previewWindow = window.open('', '_blank');
+        
+        // Write the HTML into the preview window with proper structure
+        previewWindow.document.write(`
+         <!DOCTYPE html>
+      <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+                ${styleTag}  <!-- CSS link is placed inside the head -->
+            </head>
+            <body>
+                <h1>${title}</h1>
+                ${content}   <!-- Dynamic content is injected here -->
+                ${scriptTags}  <!-- Script is placed just before the closing body tag -->
+            </body>
+            </html>
+        `);
+        
+        // Close the document stream to render the content
+        previewWindow.document.close();
+    } else {
+        alert('Please fill in the title and content to preview.');
+    }
+});
+
+
+       editPreviewButton.addEventListener('click', function () {
+    const content = editorContainer.innerHTML;  // Get content from the editor
+    const title = postTitleInput.value;         // Get the post title input
+
+    // Check if content and title are filled in
+    if (content && title) {
+        const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
+        const metaAuthor = metaAuthorInput.value;      // Get meta author input
+        
+        // Generate dynamic tags (style and script)
+        const scriptTags = generateDynamicScriptTags(title);  // Get script tags
+        const styleTag = generateDynamicStyleTag(title);      // Get style tag
+
+        // Open the preview window
+        const previewWindow = window.open('', '_blank');
+        
+        // Write the HTML into the preview window with proper structure
+        previewWindow.document.write(`
+        <!DOCTYPE html>
+      <html lang="en">
+       
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+                ${styleTag}  <!-- CSS link is placed inside the head -->
+            </head>
+            <body>
+                <h1>${title}</h1>
+                ${content}   <!-- Dynamic content is injected here -->
+                ${scriptTags}  <!-- Script is placed just before the closing body tag -->
+            </body>
+            </html>
+        `);
+        
+        // Close the document stream to render the content
+        previewWindow.document.close();
+    } else {
+        alert('Please fill in the title and content to preview.');
+    }
+});
+
 
         function execCmd(command, value = null) {
             document.execCommand(command, false, value);
@@ -370,14 +433,54 @@ input[type=text] {
                 postElement.className = 'post';
 
                 if (isAdmin || post.userId === user.uid) {
-                    const previewButton = document.createElement('button');
-                    previewButton.innerText = 'Preview';
-                    previewButton.onclick = function () {
-                        const previewWindow = window.open('', '_blank');
-                        const dynamicTags = generateDynamicTags(post.title);
-                        previewWindow.document.write(`<h1>${post.title}</h1>${dynamicTags}${post.content}`);
-                        previewWindow.document.close();
-                    };
+                  // Create the preview button
+const previewButton = document.createElement('button');
+previewButton.innerText = 'Preview';
+
+// Add an onclick event to the preview button
+previewButton.onclick = function () {
+    const title = post.title; // Assuming post.title is available
+    const content = post.content; // Assuming post.content is available
+    
+    // Ensure title and content are available
+    if (title && content) {
+        const metaKeywords = metaKeywordsInput.value; // Assuming you have an input for keywords
+        const metaAuthor = metaAuthorInput.value; // Assuming you have an input for author
+        
+        // Generate dynamic tags (style and scripts)
+        const styleTag = generateDynamicStyleTag(title); // Function to generate <link> for styles
+        const scriptTags = generateDynamicScriptTags(title); // Function to generate <script> tags
+
+        // Open a new preview window
+        const previewWindow = window.open('', '_blank');
+
+        // Write HTML structure into the preview window
+        previewWindow.document.write(`
+        <!DOCTYPE html>
+      <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+                ${styleTag} <!-- Include dynamic styles -->
+            </head>
+            <body>
+                <h1>${title}</h1>
+                ${content} <!-- Include dynamic content -->
+                ${scriptTags} <!-- Include dynamic scripts before closing body -->
+            </body>
+            </html>
+        `);
+
+        // Close the document stream to render the content
+        previewWindow.document.close();
+   
+};
+
+
+
 
                     const editButton = document.createElement('button');
                     editButton.innerText = 'Edit';
