@@ -220,7 +220,8 @@ input[type=text] {
             const dynamicTags = generateDynamicTags(title);
             if (content && title) {
                 const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(`<h1>${title}</h1>${dynamicTags}${content}`);
+                previewWindow.document.write(` const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">;
+<h1>${title}</h1>${dynamicTags}${content}`);
                 previewWindow.document.close();
             } else {
                 alert('Please fill in the title and content to preview.');
@@ -230,6 +231,8 @@ input[type=text] {
         editPreviewButton.addEventListener('click', function () {
             const content = editorContainer.innerHTML;
             const title = postTitleInput.value;
+            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+
             const dynamicTags = generateDynamicTags(title);
             if (content && title) {
                 const previewWindow = window.open('', '_blank');
@@ -248,6 +251,8 @@ input[type=text] {
         function updateOutput() {
             const content = editorContainer.innerHTML;
             const title = postTitleInput.value;
+            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+
             const dynamicTags = generateDynamicTags(title);
             generatedHTML.innerText = `${dynamicTags}\n${content}`;
             generatedHTML.style.display = 'block';
@@ -402,9 +407,8 @@ input[type=text] {
             const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
             const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
             const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
-            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
-
-            return `${styleTag}\n${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
+           
+            return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
         }
         async function handleLogout() {
             try {
