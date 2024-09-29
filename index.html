@@ -439,12 +439,7 @@ previewButton.innerText = 'Preview';
 
 // Add an onclick event to the preview button
 previewButton.onclick = function () {
-    const title = post.title; // Assuming post.title is available
-    const content = post.content; // Assuming post.content is available
-    
-    // Ensure title and content are available
-    if (title && content) {
-        const metaKeywords = metaKeywordsInput.value; // Assuming you have an input for keywords
+     const metaKeywords = metaKeywordsInput.value; // Assuming you have an input for keywords
         const metaAuthor = metaAuthorInput.value; // Assuming you have an input for author
         
         // Generate dynamic tags (style and scripts)
