@@ -125,6 +125,9 @@ input[type=text] {
 
         <!-- Title Input -->
         <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
+        <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
+        <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
+
 
         <!-- Toolbar for formatting -->
         <div id="toolbar" style="display: none;">
@@ -191,6 +194,8 @@ input[type=text] {
         editPreviewButton.style.display = 'none';
         document.body.appendChild(editPreviewButton);
         const postTitleInput = document.getElementById('postTitle');
+        const metaKeywordsInput = document.getElementById('metaKeywords');
+        const metaAuthorInput = document.getElementById('metaAuthor');
 
         loadPosts();
 
@@ -205,6 +210,9 @@ input[type=text] {
         createPostButton.addEventListener('click', function () {
             resetEditor();
             postTitleInput.style.display = 'block';
+             metaKeywordsInput.style.display = 'block';
+            metaAuthorInput.style.display = 'block';
+           
             editorContainer.style.display = 'block';
             submitButton.style.display = 'inline-block';
             previewButton.style.display = 'inline-block';
@@ -220,8 +228,7 @@ input[type=text] {
             const dynamicTags = generateDynamicTags(title);
             if (content && title) {
                 const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(` const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">;
-<h1>${title}</h1>${dynamicTags}${content}`);
+                previewWindow.document.write(`<h1>${title}</h1>${dynamicTags}${content}`);
                 previewWindow.document.close();
             } else {
                 alert('Please fill in the title and content to preview.');
@@ -231,8 +238,6 @@ input[type=text] {
         editPreviewButton.addEventListener('click', function () {
             const content = editorContainer.innerHTML;
             const title = postTitleInput.value;
-            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
-
             const dynamicTags = generateDynamicTags(title);
             if (content && title) {
                 const previewWindow = window.open('', '_blank');
@@ -251,8 +256,6 @@ input[type=text] {
         function updateOutput() {
             const content = editorContainer.innerHTML;
             const title = postTitleInput.value;
-            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
-
             const dynamicTags = generateDynamicTags(title);
             generatedHTML.innerText = `${dynamicTags}\n${content}`;
             generatedHTML.style.display = 'block';
@@ -264,6 +267,9 @@ input[type=text] {
             const user = auth.currentUser;
             const postContent = editorContainer.innerHTML;
             const postTitle = postTitleInput.value;
+             const metaKeywords = metaKeywordsInput.value;
+            const metaAuthor = metaAuthorInput.value;
+
 
             if (await isTitleTaken(postTitle) && !currentEditPostId && status !== "none") {
                 alert("Post title already taken. Please choose another.");
@@ -278,7 +284,10 @@ input[type=text] {
                         status: status,
                         userId: user.uid,
                         userName: user.displayName || user.email,
-                        createdAt: new Date() // Timestamp for sorting
+                        createdAt: new Date(), // Timestamp for sorting
+                         metaKeywords: metaKeywords,
+                        metaAuthor: metaAuthor.split('@')[0], // Only take the part before @
+                
                     };
 
                     if (currentEditPostId) {
@@ -387,6 +396,9 @@ input[type=text] {
             currentEditPostId = null;
             editorContainer.innerHTML = '';
             postTitleInput.value = '';
+             metaKeywordsInput.style.display = 'none';
+            metaAuthorInput.style.display = 'none';
+           
             editorContainer.style.display = 'none';
             submitButton.style.display = 'none';
             saveDraftButton.style.display = 'none'; 
@@ -407,8 +419,10 @@ input[type=text] {
             const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
             const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
             const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
-           
-            return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
+            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+
+            return `
+            ${styleTag}\n${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
         }
         async function handleLogout() {
             try {
