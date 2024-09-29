@@ -253,23 +253,31 @@ input[type=text] {
             updateOutput();
         }
 
-        function updateOutput() {
-            const content = editorContainer.innerHTML;
-            const title = postTitleInput.value;
-            const dynamicTags = generateDynamicTags(title);
-            generatedHTML.innerText = `<!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <meta name="description" content="${post.metaKeywords}">
-                            <meta name="author" content="${post.metaAuthor}">
-                            <title>${post.title}</title>
-                            ${dynamicTags}
-                        </head>
-                        <body>${post.content}</body></html>`;
-            generatedHTML.style.display = 'block';
-        }
+       function updateOutput() {
+    const content = editorContainer.innerHTML;   // Get content from the editor
+    const title = postTitleInput.value;          // Get the post title input
+    const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
+    const metaAuthor = metaAuthorInput.value;    // Get meta author input
+    
+    // Generate dynamic meta tags
+    const dynamicTags = generateDynamicTags(title, metaKeywords, metaAuthor);
+
+    // Set the generated HTML with proper formatting
+    generatedHTML.innerText = `
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${title}</title>
+            ${dynamicTags}
+        </head>
+        <body>
+            ${content}
+        </body>
+    `;
+    // Ensure the generated HTML is displayed
+    generatedHTML.style.display = 'block';
+}
+
 
         editorContainer.addEventListener('input', updateOutput);
 
