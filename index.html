@@ -115,47 +115,42 @@ input[type=text] {
 </head>
 <body>
 
-    <div class="header">
-        <button id="createPostButton">Create Post</button>
-        <button style="margin-left: 52%;" id="logoutButton">Logout</button>
+   <div class="header">
+    <button id="createPostButton">Create Post</button>
+    <button style="margin-left: 52%;" id="logoutButton">Logout</button>
+</div>
+
+<div class="admin-container">
+    <!-- Title Input -->
+    <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
+    <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
+    <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
+
+    <!-- Toolbar for formatting -->
+    <div id="toolbar" style="display: none;">
+        <button onclick="execCmd('bold')">Bold</button>
+        <button onclick="execCmd('justifyLeft')">Left</button>
+        <button onclick="execCmd('justifyCenter')">Center</button>
+        <button onclick="execCmd('justifyRight')">Right</button>
+        <button onclick="insertContentDiv1()">Heading 1</button>
+        <button onclick="insertContentDiv2()">Heading 2</button>
     </div>
 
-    <div class="admin-container">
-       
+    <!-- Content editor -->
+    <div contenteditable="true" id="postContent" style="text-align:left;margin:5px; padding: 10px; border: 1px solid #ddd; min-height: 150px; margin-top: 10px; display: none;"></div>
 
-        <!-- Title Input -->
-        <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
-        <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
-        <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
+    <!-- Generated HTML Display -->
+    <div id="generatedHTML" class="generatedHTML" style="display: none;"></div>
 
+    <!-- Buttons -->
+    <button id="submitPost" style="display: none;">Submit Post</button>
+    <button id="previewPost" style="display: none;">Preview in New Tab</button>
 
-        <!-- Toolbar for formatting -->
-        <div id="toolbar" style="display: none;">
-            <button onclick="execCmd('bold')">Bold</button>
-            <button onclick="execCmd('justifyLeft')">Left</button>
-            <button onclick="execCmd('justifyCenter')">Center</button>
-            <button onclick="execCmd('justifyRight')">Right</button>
-            <button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
-             <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
-                   
-            
-        </div>
+    <!-- Posts Display -->
+    <div id="posts" class="posts"></div>
+</div>
 
-        <!-- Content editor -->
-        <div contenteditable="true" id="postContent" style="text-align:left;margin:5px; padding: 10px; border: 1px solid #ddd; min-height: 150px; margin-top: 10px; display: none;"></div>
-
-        <!-- Generated HTML Display -->
-        <div id="generatedHTML" class="generatedHTML" style="display: none;"></div>
-
-        <!-- Buttons -->
-        <button id="submitPost" style="display: none;">Submit Post</button>
-        <button id="previewPost" style="display: none;">Preview in New Tab</button>
-
-        <!-- Posts Display -->
-        <div id="posts" class="posts"></div>
-    </div>
-
-   <script type="module">
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
@@ -210,7 +205,7 @@ input[type=text] {
         createPostButton.addEventListener('click', function () {
             resetEditor();
             postTitleInput.style.display = 'block';
-             metaKeywordsInput.style.display = 'block';
+            metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
            
             editorContainer.style.display = 'block';
@@ -223,29 +218,11 @@ input[type=text] {
         });
 
         previewButton.addEventListener('click', function () {
-            const content = editorContainer.innerHTML;
-            const title = postTitleInput.value;
-            const dynamicTags = generateDynamicTags(title);
-            if (content && title) {
-                const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(`<h1>${title}</h1>${dynamicTags}${content}`);
-                previewWindow.document.close();
-            } else {
-                alert('Please fill in the title and content to preview.');
-            }
+            previewPost();
         });
 
         editPreviewButton.addEventListener('click', function () {
-            const content = editorContainer.innerHTML;
-            const title = postTitleInput.value;
-            const dynamicTags = generateDynamicTags(title);
-            if (content && title) {
-                const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(`<h1>${title}</h1>${dynamicTags}${content}`);
-                previewWindow.document.close();
-            } else {
-                alert('Please fill in the title and content to preview.');
-            }
+            previewPost();
         });
 
         function execCmd(command, value = null) {
@@ -267,9 +244,8 @@ input[type=text] {
             const user = auth.currentUser;
             const postContent = editorContainer.innerHTML;
             const postTitle = postTitleInput.value;
-             const metaKeywords = metaKeywordsInput.value;
+            const metaKeywords = metaKeywordsInput.value;
             const metaAuthor = metaAuthorInput.value;
-
 
             if (await isTitleTaken(postTitle) && !currentEditPostId && status !== "none") {
                 alert("Post title already taken. Please choose another.");
@@ -284,26 +260,17 @@ input[type=text] {
                         status: status,
                         userId: user.uid,
                         userName: user.displayName || user.email,
-                        createdAt: new Date(), // Timestamp for sorting
-                         metaKeywords: metaKeywords,
-                        metaAuthor: metaAuthor.split('@')[0], // Only take the part before @
-                
+                        createdAt: new Date(),
+                        metaKeywords: metaKeywords,
+                        metaAuthor: metaAuthor.split('@')[0],
                     };
 
                     if (currentEditPostId) {
                         await updateDoc(doc(db, "posts", currentEditPostId), postData);
-                        if (status === "none") {
-                            alert('Post has been saved as draft!');
-                        } else {
-                            alert('Post resubmitted successfully!');
-                        }
+                        alert(status === "none" ? 'Post has been saved as draft!' : 'Post resubmitted successfully!');
                     } else {
                         await addDoc(collection(db, "posts"), postData);
-                        if (status === "none") {
-                            alert('Post saved successfully as draft!');
-                        } else {
-                            alert('Post submitted successfully!');
-                        }
+                        alert(status === "none" ? 'Post saved successfully as draft!' : 'Post submitted successfully!');
                     }
 
                     loadPosts();
@@ -331,7 +298,7 @@ input[type=text] {
         }
 
         async function loadPosts() {
-            const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc")); // Order by creation time
+            const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
             const postsSnapshot = await getDocs(postsQuery);
             postsContainer.innerHTML = '';
 
@@ -347,43 +314,25 @@ input[type=text] {
                     const previewButton = document.createElement('button');
                     previewButton.innerText = 'Preview';
                     previewButton.onclick = function () {
-                        const previewWindow = window.open('', '_blank');
-                        const dynamicTags = generateDynamicTags(post.title);
-                        previewWindow.document.write(`<h1>${post.title}</h1>${dynamicTags}${post.content}`);
-                        previewWindow.document.close();
+                        previewInNewTab(post.title, post.content);
                     };
 
                     const editButton = document.createElement('button');
                     editButton.innerText = 'Edit';
                     editButton.onclick = function () {
-                        currentEditPostId = doc.id;
-                        postTitleInput.value = post.title;
-                        editorContainer.innerHTML = post.content;
-                        postTitleInput.style.display = 'block';
-                        editorContainer.style.display = 'block';
-                        submitButton.style.display = 'inline-block';
-                        saveDraftButton.style.display = 'inline-block';
-                        editPreviewButton.style.display = 'inline-block';
-                        previewButton.style.display = 'none';
-                        postsContainer.style.display = 'none';
-                        document.getElementById('toolbar').style.display = 'block';
+                        editPost(doc.id, post.title, post.content);
                     };
 
-                    postElement.innerHTML = 
-                        `<h3>${post.title}</h3>
+                    postElement.innerHTML = `
+                        <h3>${post.title}</h3>
                         <postcontent>${post.content}</postcontent>
                         <status>Status: ${post.status === "none" ? "Draft" : post.status}</status>
-                        `; 
+                    `;
                     postElement.appendChild(previewButton);
                     postElement.appendChild(editButton);
                     postsContainer.appendChild(postElement);
-                    previewButton.style.float = 'right';
-                    previewButton.style.marginTop = '-10px';
-                    previewButton.style.padding = '8px';
-                    editButton.style.float = 'right';
-                    editButton.style.marginTop = '-10px';
-                    editButton.style.marginRight = '5px';
-                    editButton.style.padding = '8px';
+                    styleButton(previewButton);
+                    styleButton(editButton);
                 }
             });
 
@@ -392,48 +341,111 @@ input[type=text] {
             }
         }
 
+        function styleButton(button) {
+            button.style.float = 'right';
+            button.style.marginTop = '-10px';
+            button.style.marginRight = '5px';
+            button.style.padding = '8px';
+        }
+
         function resetEditor() {
             currentEditPostId = null;
             editorContainer.innerHTML = '';
             postTitleInput.value = '';
-             metaKeywordsInput.style.display = 'none';
-            metaAuthorInput.style.display = 'none';
-           
+            metaKeywordsInput.value = '';
+            metaAuthorInput.value = '';
+            document.getElementById('toolbar').style.display = 'none';
             editorContainer.style.display = 'none';
+            generatedHTML.style.display = 'none';
             submitButton.style.display = 'none';
-            saveDraftButton.style.display = 'none'; 
-            editPreviewButton.style.display = 'none';
             previewButton.style.display = 'none';
-            postTitleInput.style.display = 'none';
+            saveDraftButton.style.display = 'none';
             postsContainer.style.display = 'block';
         }
 
-        async function handleLogout() {
-            await signOut(auth);
-            window.location.href = 'login.html';
+        function previewInNewTab(title, content) {
+            const newWindow = window.open();
+            newWindow.document.write(`
+                <html>
+                <head>
+                    <title>${title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        h1 { text-align: center; }
+                        .content { margin: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${title}</h1>
+                    <div class="content">${content}</div>
+                </body>
+                </html>
+            `);
+            newWindow.document.close();
         }
 
-       
-       function generateDynamicTags(title) {
-            const prefix = title.split('/').map(() => '..').join('/');
-            const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
-            const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
-            const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
-            const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+        function editPost(postId, title, content) {
+            currentEditPostId = postId;
+            postTitleInput.value = title;
+            editorContainer.innerHTML = content;
+            postTitleInput.style.display = 'block';
+            metaKeywordsInput.style.display = 'block';
+            metaAuthorInput.style.display = 'block';
 
-            return ` <meta name="description" content="${metaKeywordsInput.value}">
-                <meta name="author" content="${metaAuthorInput.value}">
-          ${styleTag}\n${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
+            editorContainer.style.display = 'block';
+            submitButton.style.display = 'inline-block';
+            previewButton.style.display = 'inline-block';
+            saveDraftButton.style.display = 'inline-block';
+            document.getElementById('toolbar').style.display = 'block';
+            postsContainer.style.display = 'none';
         }
-        async function handleLogout() {
-            try {
-                await signOut(auth);
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error("Error logging out: ", error);
-            }
+
+        function generateDynamicTags(title) {
+            return `<title>${title}</title>
+                    <meta name="keywords" content="${metaKeywordsInput.value}">
+                    <meta name="author" content="${metaAuthorInput.value}">`;
+        }
+
+        function previewPost() {
+            const title = postTitleInput.value;
+            const content = editorContainer.innerHTML;
+            const newWindow = window.open();
+            newWindow.document.write(`
+                <html>
+                <head>
+                    <title>${title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        h1 { text-align: center; }
+                        .content { margin: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${title}</h1>
+                    <div class="content">${content}</div>
+                </body>
+                </html>
+            `);
+            newWindow.document.close();
         }
     });
+
+    function insertContentDiv1() {
+        execCmd('insertHTML', '<h1>Your Heading Here</h1>');
+    }
+
+    function insertContentDiv2() {
+        execCmd('insertHTML', '<h2>Your Subheading Here</h2>');
+    }
+
+    async function handleLogout() {
+        try {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error('Error signing out: ', error);
+        }
+    }
 </script>
 
 
