@@ -421,7 +421,8 @@ input[type=text] {
             const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
             const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
 
-            return `
+            return ` <meta name="author" content="${metaAuthor}">
+        <meta name="keywords" content="${metaKeywords}">
             ${styleTag}\n${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
         }
         async function handleLogout() {
