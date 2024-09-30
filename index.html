@@ -154,6 +154,7 @@ input[type=text] {
         <!-- Posts Display -->
         <div id="posts" class="posts"></div>
     </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
 
    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -347,7 +348,7 @@ input[type=text] {
     const styleTag = generateDynamicStyleTag(title);      // Get style tag
 
     // Set the generated HTML with proper formatting
-    generatedHTML.innerText = `
+   const rawHTML = `
     <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -386,12 +387,27 @@ input[type=text] {
         </html>
     `;
     
+  
+
+
+      
+// Format the raw HTML using js-beautify, no changes to the actual content
+    const formattedHTML = html_beautify(rawHTML, {
+        indent_size: 2,        // Set indentation to 2 spaces
+        preserve_newlines: true, // Keep existing newlines as they are
+        max_preserve_newlines: 2 // Maximum 2 consecutive newlines preserved
+    });
+
+    // Set the generated HTML with proper formatting
+    generatedHTML.innerText = formattedHTML;
+    
     // Ensure the generated HTML is displayed
     generatedHTML.style.display = 'block';
 }
 
-
-        editorContainer.addEventListener('input', updateOutput);
+// Auto-update when content changes without pressing any button
+editorContainer.addEventListener('input', updateOutput);
+        
 
         async function createPost(status) {
             const user = auth.currentUser;
