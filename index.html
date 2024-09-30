@@ -49,7 +49,7 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width:100%;
             margin-top: 80px;
-            text-align: center;
+            text-align: ;
         }
 
 input[type=text] {
@@ -337,7 +337,7 @@ input[type=text] {
             updateOutput();
         }
 
-      function updateOutput() {
+    function updateOutput() {
     const content = editorContainer.innerHTML;   // Get content from the editor
     const title = postTitleInput.value;          // Get the post title input
     const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
@@ -347,8 +347,8 @@ input[type=text] {
     const scriptTags = generateDynamicScriptTags(title);  // Get script tags
     const styleTag = generateDynamicStyleTag(title);      // Get style tag
 
-    // Set the generated HTML with proper formatting
-   const rawHTML = `
+    // Raw HTML structure with dynamic variables
+    const rawHTML = `
     <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -357,57 +357,56 @@ input[type=text] {
             <title>${title}</title>
             <meta name="description" content="${metaKeywords}">
             <meta name="author" content="${metaAuthor}">
-            ${styleTag}  <!-- CSS link is placed inside head -->
+            ${styleTag}
         </head>
         <body>
-         <main class="container">
-    <form id="searchForm" onsubmit="performSearch(event);">
-      <div class="search-container">
-        <span class="search-icon" id="searchIcon">
-          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
-        </span>
-        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
-          oninput="updateSuggestions(event)">
-        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
-      </div>
-      <div id="suggestions" class="suggestions-list"></div>
-    </form>
+          <main class="container">
+            <form id="searchForm" onsubmit="performSearch(event);">
+              <div class="search-container">
+                <span class="search-icon" id="searchIcon">
+                  <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+                </span>
+                <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+                  oninput="updateSuggestions(event)">
+                <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+              </div>
+              <div id="suggestions" class="suggestions-list"></div>
+            </form>
 
-    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
-      <div class="modal1-content">
-        <span class="close" onclick="closeModal1(event)">&times;</span>
-        <h2>Search Results</h2>
-        <div id="results"></div>
-      </div>
-    </div>
-  </main>
-            ${content}
-            ${scriptTags}  <!-- Script is placed just before the closing body tag -->
+            <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+              <div class="modal1-content">
+                <span class="close" onclick="closeModal1(event)">&times;</span>
+                <h2>Search Results</h2>
+                <div id="results"></div>
+              </div>
+            </div>
+          </main>
+          ${content}
+          ${scriptTags}
         </body>
-        </html>
+      </html>
     `;
-    
-  
 
-
-      
-// Format the raw HTML using js-beautify, no changes to the actual content
+    // Format the raw HTML using js-beautify
     const formattedHTML = html_beautify(rawHTML, {
         indent_size: 2,        // Set indentation to 2 spaces
         preserve_newlines: true, // Keep existing newlines as they are
         max_preserve_newlines: 2 // Maximum 2 consecutive newlines preserved
     });
 
-    // Set the generated HTML with proper formatting
+    // Set the formatted HTML inside the generatedHTML container
     generatedHTML.innerText = formattedHTML;
-    
+
     // Ensure the generated HTML is displayed
     generatedHTML.style.display = 'block';
 }
 
-// Auto-update when content changes without pressing any button
+// Automatically update output on content change
 editorContainer.addEventListener('input', updateOutput);
-        
+postTitleInput.addEventListener('input', updateOutput);
+metaKeywordsInput.addEventListener('input', updateOutput);
+metaAuthorInput.addEventListener('input', updateOutput);
+
 
         async function createPost(status) {
             const user = auth.currentUser;
