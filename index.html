@@ -337,75 +337,74 @@ input[type=text] {
             updateOutput();
         }
 
-    function updateOutput() {
-    const content = editorContainer.innerHTML;   // Get content from the editor
-    const title = postTitleInput.value;          // Get the post title input
-    const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
-    const metaAuthor = metaAuthorInput.value;    // Get meta author input
+   
+
+function updateOutput() {
+    const textEditor = document.getElementById("textEditor");
+    const output = document.getElementById("output");
+
+    // Get the current HTML content
+    const content = textEditor.innerHTML;
+
+    // Your custom title, meta, and script handling here
+    const title = postTitleInput.value;
+    const metaKeywords = metaKeywordsInput.value;
+    const metaAuthor = metaAuthorInput.value;
     
-    // Generate dynamic tags
-    const scriptTags = generateDynamicScriptTags(title);  // Get script tags
-    const styleTag = generateDynamicStyleTag(title);      // Get style tag
-
-    // Raw HTML structure with dynamic variables
-    const rawHTML = `
+    // Generate the full HTML with dynamic content
+    let rawHTML = `
     <!DOCTYPE html>
-      <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${title}</title>
-            <meta name="description" content="${metaKeywords}">
-            <meta name="author" content="${metaAuthor}">
-            ${styleTag}
-        </head>
-        <body>
-          <main class="container">
-            <form id="searchForm" onsubmit="performSearch(event);">
-              <div class="search-container">
-                <span class="search-icon" id="searchIcon">
-                  <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
-                </span>
-                <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
-                  oninput="updateSuggestions(event)">
-                <button type="button" id="searchButton" onclick="performSearch()">Search</button>
-              </div>
-              <div id="suggestions" class="suggestions-list"></div>
-            </form>
-
-            <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
-              <div class="modal1-content">
-                <span class="close" onclick="closeModal1(event)">&times;</span>
-                <h2>Search Results</h2>
-                <div id="results"></div>
-              </div>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${title}</title>
+        <meta name="description" content="${metaKeywords}">
+        <meta name="author" content="${metaAuthor}">
+        <!-- Insert any dynamic style tags here -->
+      </head>
+      <body>
+        <main class="container">
+          <form id="searchForm" onsubmit="performSearch(event);">
+            <div class="search-container">
+              <span class="search-icon" id="searchIcon">
+                <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+              </span>
+              <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off" oninput="updateSuggestions(event)">
+              <button type="button" id="searchButton" onclick="performSearch()">Search</button>
             </div>
-          </main>
-          ${content}
-          ${scriptTags}
-        </body>
-      </html>
+            <div id="suggestions" class="suggestions-list"></div>
+          </form>
+
+          <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+            <div class="modal1-content">
+              <span class="close" onclick="closeModal1(event)">&times;</span>
+              <h2>Search Results</h2>
+              <div id="results"></div>
+            </div>
+          </div>
+        </main>
+        ${content}  <!-- Inserted content -->
+      </body>
+    </html>
     `;
 
-    // Format the raw HTML using js-beautify
+    // Format the raw HTML content using js-beautify
     const formattedHTML = html_beautify(rawHTML, {
-        indent_size: 2,        // Set indentation to 2 spaces
-        preserve_newlines: true, // Keep existing newlines as they are
-        max_preserve_newlines: 2 // Maximum 2 consecutive newlines preserved
+        indent_size: 4,
+        space_in_empty_paren: true
     });
 
-    // Set the formatted HTML inside the generatedHTML container
-    generatedHTML.innerText = formattedHTML;
+    // Update the editor and output with formatted HTML
+    textEditor.innerHTML = formattedHTML;
+    output.value = formattedHTML;
 
-    // Ensure the generated HTML is displayed
-    generatedHTML.style.display = 'block';
+    // Optionally, ensure the output is displayed
+    output.style.display = 'block';
 }
 
-// Automatically update output on content change
-editorContainer.addEventListener('input', updateOutput);
-postTitleInput.addEventListener('input', updateOutput);
-metaKeywordsInput.addEventListener('input', updateOutput);
-metaAuthorInput.addEventListener('input', updateOutput);
+// Call updateOutput whenever you want the content formatted live
+document.getElementById("textEditor").addEventListener("input", updateOutput);
 
 
         async function createPost(status) {
