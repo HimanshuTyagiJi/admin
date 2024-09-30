@@ -296,7 +296,27 @@ input[type=text] {
                 ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
             <body>
-                <h1>${title}</h1>
+                 <main class="container">
+    <form id="searchForm" onsubmit="performSearch(event);">
+      <div class="search-container">
+        <span class="search-icon" id="searchIcon">
+          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+        </span>
+        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+          oninput="updateSuggestions(event)">
+        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions-list"></div>
+    </form>
+
+    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+      <div class="modal1-content">
+        <span class="close" onclick="closeModal1(event)">&times;</span>
+        <h2>Search Results</h2>
+        <div id="results"></div>
+      </div>
+    </div>
+  </main>
                 ${content}   <!-- Dynamic content is injected here -->
                 ${scriptTags}  <!-- Script is placed just before the closing body tag -->
             </body>
@@ -339,6 +359,27 @@ input[type=text] {
             ${styleTag}  <!-- CSS link is placed inside head -->
         </head>
         <body>
+         <main class="container">
+    <form id="searchForm" onsubmit="performSearch(event);">
+      <div class="search-container">
+        <span class="search-icon" id="searchIcon">
+          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+        </span>
+        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+          oninput="updateSuggestions(event)">
+        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions-list"></div>
+    </form>
+
+    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+      <div class="modal1-content">
+        <span class="close" onclick="closeModal1(event)">&times;</span>
+        <h2>Search Results</h2>
+        <div id="results"></div>
+      </div>
+    </div>
+  </main>
             ${content}
             ${scriptTags}  <!-- Script is placed just before the closing body tag -->
         </body>
@@ -462,7 +503,28 @@ previewButton.onclick = function () {
                 ${styleTag} <!-- Include dynamic styles -->
             </head>
             <body>
-                <h1>${title}</h1>
+             <main class="container">
+    <form id="searchForm" onsubmit="performSearch(event);">
+      <div class="search-container">
+        <span class="search-icon" id="searchIcon">
+          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+        </span>
+        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+          oninput="updateSuggestions(event)">
+        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions-list"></div>
+    </form>
+
+    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+      <div class="modal1-content">
+        <span class="close" onclick="closeModal1(event)">&times;</span>
+        <h2>Search Results</h2>
+        <div id="results"></div>
+      </div>
+    </div>
+  </main>
+                
                 ${content} <!-- Include dynamic content -->
                 ${scriptTags} <!-- Include dynamic scripts before closing body -->
             </body>
