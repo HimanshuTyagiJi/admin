@@ -347,7 +347,7 @@ input[type=text] {
     const styleTag = generateDynamicStyleTag(title);      // Get style tag
 
     // Set the generated HTML with proper formatting
-    generatedHTML.innerText = 
+    generatedHTML.innerText = `
     <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -384,11 +384,13 @@ input[type=text] {
             ${scriptTags}  <!-- Script is placed just before the closing body tag -->
         </body>
         </html>
-    ;
+    `;
     
     // Ensure the generated HTML is displayed
     generatedHTML.style.display = 'block';
 }
+
+
         editorContainer.addEventListener('input', updateOutput);
 
         async function createPost(status) {
