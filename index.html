@@ -512,6 +512,9 @@ input[type=text] {
                     editButton.onclick = function () {
                         currentEditPostId = doc.id;
                         postTitleInput.value = post.title;
+                         metaKeywordsInput.style.display = 'block';
+                         metaAuthorInput.style.display = 'block';
+           
                         editorContainer.innerHTML = post.content;
                         postTitleInput.style.display = 'block';
                         editorContainer.style.display = 'block';
