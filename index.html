@@ -293,8 +293,7 @@ input[type=text] {
                 <title>${title}</title>
                 <meta name="description" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                <link rel="stylesheet" href="https://gklearnstudy.in/style.css">
-                ${styleTag}  <!-- CSS link is placed inside the head -->
+                    ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
             <body>
                  <main class="container">
@@ -329,6 +328,27 @@ input[type=text] {
     } else {
         alert('Please fill in the title and content to preview.');
     }
+
+              function generateDynamicScriptTags(title) {
+    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+          
+    const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
+    const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
+    const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
+    
+    // Return all script tags
+    return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
+}
+
+// Function to generate dynamic style link tag based on title
+function generateDynamicStyleTag(title) {
+    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+    
+    const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+    
+    // Return the style tag
+    return styleTag;
+}
 });
 
 
@@ -625,26 +645,7 @@ previewButton.onclick = function () {
         }
 
        
-      function generateDynamicScriptTags(title) {
-    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
-          
-    const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
-    const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
-    const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
-    
-    // Return all script tags
-    return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
-}
-
-// Function to generate dynamic style link tag based on title
-function generateDynamicStyleTag(title) {
-    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
-    
-    const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
-    
-    // Return the style tag
-    return styleTag;
-}
+   
         async function handleLogout() {
             try {
                 await signOut(auth);
