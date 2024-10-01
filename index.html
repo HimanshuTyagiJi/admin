@@ -485,107 +485,28 @@ input[type=text] {
             return !querySnapshot.empty;
         }
 
-async function loadPosts() {
-    const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc")); // Order by creation time
-    const postsSnapshot = await getDocs(postsQuery);
-    postsContainer.innerHTML = '';
+ async function loadPosts() {
+            const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc")); // Order by creation time
+            const postsSnapshot = await getDocs(postsQuery);
+            postsContainer.innerHTML = '';
 
-    const user = auth.currentUser;
-    const isAdmin = user.email === "admin@example.com";
+            const user = auth.currentUser;
+            const isAdmin = user.email === "admin@example.com";
 
-    postsSnapshot.forEach((doc) => {
-        const post = doc.data();
-        const postElement = document.createElement('div');
-        postElement.className = 'post';
+            postsSnapshot.forEach((doc) => {
+                const post = doc.data();
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
 
-        if (isAdmin || post.userId === user.uid) {
-            // Create the preview button
-            const previewButton = document.createElement('button');
-            previewButton.innerText = 'Preview';
-
-            // Add an onclick event to the preview button
-            previewButton.onclick = function () {
-                // Ensure inputs exist and capture their values
-                const metaKeywordsInput = document.getElementById('metaKeywordsInput');
-                const metaAuthorInput = document.getElementById('metaAuthorInput');
-                const title = post.title || 'Untitled'; // Fallback title
-                const content = post.content || '<p>No content available</p>'; // Fallback content
-
-                if (!metaKeywordsInput || !metaAuthorInput) {
-                    alert('Meta keywords or author inputs not found!');
-                    return;
-                }
-
-                const metaKeywords = metaKeywordsInput.value;
-                const metaAuthor = metaAuthorInput.value;
-
-                // Generate dynamic style and script tags
-                const styleTag = generatepriviewDynamicStyleTag(title); // Assuming this function is correct
-                const scriptTags = generatepriviewDynamicScriptTags(title); // Assuming this function is correct
-
-                // Open a new preview window
-                const previewWindow = window.open('', '_blank');
-
-                // Check if window opened successfully
-                if (!previewWindow || previewWindow.closed || typeof previewWindow.closed === 'undefined') {
-                    alert("Pop-up blocked! Please allow pop-ups for this website.");
-                    return;
-                }
-
-                // Start writing the HTML content to the new window
-                previewWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>${title}</title>
-                        <meta name="description" content="${metaKeywords}">
-                        <meta name="author" content="${metaAuthor}">
-                        ${styleTag} <!-- Insert dynamic styles here -->
-                    </head>
-                    <body>
-                        <main class="container">
-                            <form id="searchForm" onsubmit="performSearch(event);">
-                                <div class="search-container">
-                                    <span class="search-icon" id="searchIcon">
-                                        <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
-                                    </span>
-                                    <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
-                                        oninput="updateSuggestions(event)">
-                                    <button type="button" id="searchButton" onclick="performSearch()">Search</button>
-                                </div>
-                                <div id="suggestions" class="suggestions-list"></div>
-                            </form>
-
-                            <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
-                                <div class="modal1-content">
-                                    <span class="close" onclick="closeModal1(event)">&times;</span>
-                                    <h2>Search Results</h2>
-                                    <div id="results"></div>
-                                </div>
-                            </div>
-                        </main>
-                        ${content} <!-- Insert dynamic content here -->
-                        ${scriptTags} <!-- Insert dynamic scripts here -->
-                    </body>
-                    </html>
-                `);
-
-                // Close the document stream to render the content
-                previewWindow.document.close();
-
-                // Optional: Console log to check if everything is working fine
-                console.log("Preview window opened successfully.");
-            };
-
-            postElement.appendChild(previewButton); // Append the preview button to the post element
-        }
-
-        postsContainer.appendChild(postElement); // Add post element to the container
-    });
-}
-
+                if (isAdmin || post.userId === user.uid) {
+                    const previewButton = document.createElement('button');
+                    previewButton.innerText = 'Preview';
+                    previewButton.onclick = function () {
+                        const previewWindow = window.open('', '_blank');
+                        const dynamicTags = generateDynamicTags(post.title);
+                        previewWindow.document.write(`<h1>${post.title}</h1>${dynamicTags}${post.content}`);
+                        previewWindow.document.close();
+                    };
 
 
 
