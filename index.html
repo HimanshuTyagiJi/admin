@@ -499,10 +499,12 @@ input[type=text] {
                 postElement.className = 'post';
                 
 
-         if (isAdmin || post.userId === user.uid) {
+        // Assuming 'isAdmin' and 'user.uid' are defined earlier
+if (isAdmin || post.userId === user.uid) {
     const previewButton = document.createElement('button');
     previewButton.innerText = 'Preview';
-    
+    document.body.appendChild(previewButton); // Append the button to the DOM
+
     previewButton.addEventListener('click', function () {
         const content = editorContainer.innerHTML;  // Get content from the editor
         const title = postTitleInput.value;         // Get the post title input
@@ -510,14 +512,11 @@ input[type=text] {
         const metaKeywords = metaKeywordsInput.value || '';  // Ensure meta keywords input exists
         const metaAuthor = metaAuthorInput.value || '';      // Ensure meta author input exists
         
-        // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title) || '';  // Get script tags
         const styleTag = generatepriviewDynamicStyleTag(title) || '';      // Get style tag
 
-        // Open the preview window
         const previewWindow = window.open('', '_blank');
-        
-        // Write the HTML into the preview window with proper structure
+
         previewWindow.document.write(`
             <!DOCTYPE html>
             <html lang="en">
@@ -537,10 +536,10 @@ input[type=text] {
             </html>
         `);
         
-        // Close the document stream to render the content
         previewWindow.document.close();
     });
 }
+
 
 
 
