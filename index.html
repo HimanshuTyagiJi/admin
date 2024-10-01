@@ -498,21 +498,13 @@ input[type=text] {
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
 
-               if (isAdmin || post.userId === user.uid) {
-    const previewButton = document.createElement('button');
-    previewButton.innerText = 'Preview';
-    previewButton.onclick = function () {
-        const previewWindow = window.open('', '_blank');
-
-        const metaKeywords = metaKeywordsInput.value || '';  // Ensure meta keywords input exists
-        const metaAuthor = metaAuthorInput.value || '';      // Ensure meta author input exists
-        
-        const scriptTags = generatepriviewDynamicScriptTags(title) || '';  // Ensure script tags are set
-        const styleTag = generatepriviewDynamicStyleTag(title) || '';      // Ensure style tag is set
-
-        const content = '<h1>Sample Content</h1>';  // For testing, replace with actual content
-
-        previewWindow.document.open();  // Open document stream
+             if (isAdmin || post.userId === user.uid) {
+                    const previewButton = document.createElement('button');
+                    previewButton.innerText = 'Preview';
+                    previewButton.onclick = function () {
+                        const previewWindow = window.open('', '_blank');
+                        const dynamicTags = generateDynamicTags(post.title);
+                      
         previewWindow.document.write(`<!DOCTYPE html>
           <html lang="en">
             <head>
