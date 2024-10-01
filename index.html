@@ -249,13 +249,13 @@ input[type=text] {
                 <title>${title}</title>
                 <meta name="description" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                <link rel="stylesheet" href="https://gklearnstudy.in/style.css">
-                ${styleTag}  <!-- CSS link is placed inside the head -->
+               ${styleTag}
+           
             </head>
             <body>
                 <h1>${title}</h1>
-                ${content}   <!-- Dynamic content is injected here -->
-                ${scriptTags}  <!-- Script is placed just before the closing body tag -->
+                ${content}  
+                ${scriptTags} 
             </body>
             </html>
         `);
@@ -293,7 +293,7 @@ input[type=text] {
                 <title>${title}</title>
                 <meta name="description" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                <link rel="stylesheet" href="https://gklearnstudy.in/style.css">
+                
                 ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
             <body>
@@ -509,8 +509,8 @@ previewButton.onclick = function () {
         const metaAuthor = metaAuthorInput.value; // Assuming you have an input for author
         
         // Generate dynamic tags (style and scripts)
-        const styleTag = generateDynamicStyleTag(title); // Function to generate <link> for styles
-        const scriptTags = generateDynamicScriptTags(title); // Function to generate <script> tags
+        const styleTag = generatepriviewDynamicStyleTag(title); // Function to generate <link> for styles
+        const scriptTags = generatepriviewDynamicScriptTags(title); // Function to generate <script> tags
 
         // Open a new preview window
         const previewWindow = window.open('', '_blank');
@@ -560,7 +560,8 @@ previewButton.onclick = function () {
         previewWindow.document.close();
    
 };
-
+ 
+});
 
 
 
