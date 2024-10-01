@@ -497,46 +497,17 @@ input[type=text] {
                 const post = doc.data();
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
-                
 if (isAdmin || post.userId === user.uid) {
-    const previewButton = document.createElement('button');
-    previewButton.innerText = 'Preview';
+                    const previewButton = document.createElement('button');
+                    previewButton.innerText = 'Preview';
+                    previewButton.onclick = function () {
+                        const previewWindow = window.open('', '_blank');
+                        const dynamicTags = generateDynamicTags(post.title);
+                        previewWindow.document.write(`<h1>${post.title}</h1>${dynamicTags}${post.content}`);
+                        previewWindow.document.close();
+                    };
 
-    previewButton.onclick = function () {
-        const previewWindow = window.open('', '_blank');
-
-        // Get script tags and style tag
-        const scriptTags = generateDynamicScriptTags(post.title);  // Assuming this function returns the necessary script tags
-        const styleTag = generateDynamicStyleTag(post.title);      // Assuming this function returns the necessary style tag
-
-        // Write content to the preview window with a proper HTML structure
-        previewWindow.document.write(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${post.title} - Preview</title>
-                ${styleTag} <!-- Add style tag dynamically -->
-            </head>
-            <body>
-                <h1>${post.title}</h1>
-                <p>${post.content ? post.content : 'No content available.'}</p> <!-- Display content or default message -->
-                <button onclick="window.close();">Close Preview</button>
-                ${scriptTags} <!-- Add script tags dynamically -->
-            </body>
-            </html>
-        `);
-
-        // Close the document to ensure it gets rendered
-        previewWindow.document.close();
-    };
-
-    // Append the preview button to the relevant parent element in the DOM
-    document.body.appendChild(previewButton);
-}
-
-
+    
                     const editButton = document.createElement('button');
                     editButton.innerText = 'Edit';
                     editButton.onclick = function () {
