@@ -499,7 +499,7 @@ input[type=text] {
                 postElement.className = 'post';
                 
 
-           if (isAdmin || post.userId === user.uid) {
+         if (isAdmin || post.userId === user.uid) {
     const previewButton = document.createElement('button');
     previewButton.innerText = 'Preview';
     
@@ -507,41 +507,38 @@ input[type=text] {
         const content = editorContainer.innerHTML;  // Get content from the editor
         const title = postTitleInput.value;         // Get the post title input
 
-        // Check if content and title are filled in
-        if (content && title) {
-            const metaKeywords = metaKeywordsInput.value || '';  // Get meta keywords input
-            const metaAuthor = metaAuthorInput.value || '';      // Get meta author input
-            
-            // Generate dynamic tags (style and script)
-            const scriptTags = generatepriviewDynamicScriptTags(title) || '';  // Get script tags
-            const styleTag = generatepriviewDynamicStyleTag(title) || '';      // Get style tag
+        const metaKeywords = metaKeywordsInput.value || '';  // Ensure meta keywords input exists
+        const metaAuthor = metaAuthorInput.value || '';      // Ensure meta author input exists
+        
+        // Generate dynamic tags (style and script)
+        const scriptTags = generatepriviewDynamicScriptTags(title) || '';  // Get script tags
+        const styleTag = generatepriviewDynamicStyleTag(title) || '';      // Get style tag
 
-            // Open the preview window
-            const previewWindow = window.open('', '_blank');
-            
-            // Write the HTML into the preview window with proper structure
-            previewWindow.document.write(`
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>${title}</title>
-                    <meta name="description" content="${metaKeywords}">
-                    <meta name="author" content="${metaAuthor}">
-                    ${styleTag}
-                </head>
-                <body>
-                    <h1>${title}</h1>
-                    ${content}  
-                    ${scriptTags} 
-                </body>
-                </html>
-            `);
-            
-            // Close the document stream to render the content
-            previewWindow.document.close();
-        }
+        // Open the preview window
+        const previewWindow = window.open('', '_blank');
+        
+        // Write the HTML into the preview window with proper structure
+        previewWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+                ${styleTag}
+            </head>
+            <body>
+                <h1>${title}</h1>
+                ${content}  
+                ${scriptTags} 
+            </body>
+            </html>
+        `);
+        
+        // Close the document stream to render the content
+        previewWindow.document.close();
     });
 }
 
