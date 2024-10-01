@@ -498,7 +498,7 @@ input[type=text] {
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
                 
- if (isAdmin || post.userId === user.uid) {
+if (isAdmin || post.userId === user.uid) {
     const previewButton = document.createElement('button');
     previewButton.innerText = 'Preview';
 
@@ -521,7 +521,7 @@ input[type=text] {
             </head>
             <body>
                 <h1>${post.title}</h1>
-                <p>${post.content || 'No content available.'}</p> <!-- Default message if content is empty -->
+                <p>${post.content ? post.content : 'No content available.'}</p> <!-- Display content or default message -->
                 <button onclick="window.close();">Close Preview</button>
                 ${scriptTags} <!-- Add script tags dynamically -->
             </body>
@@ -535,6 +535,7 @@ input[type=text] {
     // Append the preview button to the relevant parent element in the DOM
     document.body.appendChild(previewButton);
 }
+
 
                     const editButton = document.createElement('button');
                     editButton.innerText = 'Edit';
