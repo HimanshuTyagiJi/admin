@@ -235,27 +235,7 @@ input[type=text] {
         // Generate dynamic tags (style and script)
         const scriptTags = generateDynamicScriptTags(title);  // Get script tags
         const styleTag = generateDynamicStyleTag(title);      // Get style tag
-function generateDynamicStyleTag(title) {
-    let dynamicStyles = '';
 
-    if (title) {
-        dynamicStyles = `<style>
-            body {
-                background-color: ${title === 'special' ? '#ffebcd' : '#f0f0f0'};
-            }
-            h1 {
-                color: blue;
-            }
-        </style>`;
-    }
-
-    return dynamicStyles;
-}
-
-// Function to ensure the permanent stylesheet link is included
-function generatePermanentStyleLink() {
-    return `<link rel="stylesheet" href="https://gklearnstudy.in/style.css">`;
-}
         // Open the preview window
         const previewWindow = window.open('', '_blank');
         
@@ -269,6 +249,7 @@ function generatePermanentStyleLink() {
                 <title>${title}</title>
                 <meta name="description" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
+                <link rel="stylesheet" href="https://gklearnstudy.in/style.css">
                 ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
             <body>
@@ -299,27 +280,6 @@ function generatePermanentStyleLink() {
         // Generate dynamic tags (style and script)
         const scriptTags = generateDynamicScriptTags(title);  // Get script tags
         const styleTag = generateDynamicStyleTag(title);      // Get style tag
-     function generateDynamicStyleTag(title) {
-    let dynamicStyles = '';
-
-    if (title) {
-        dynamicStyles = `<style>
-            body {
-                background-color: ${title === 'special' ? '#ffebcd' : '#f0f0f0'};
-            }
-            h1 {
-                color: blue;
-            }
-        </style>`;
-    }
-
-    return dynamicStyles;
-}
-
-// Function to ensure the permanent stylesheet link is included
-function generatePermanentStyleLink() {
-    return `<link rel="stylesheet" href="https://gklearnstudy.in/style.css">`;
-} // Open the preview window
         const previewWindow = window.open('', '_blank');
         
         // Write the HTML into the preview window with proper structure
@@ -333,6 +293,7 @@ function generatePermanentStyleLink() {
                 <title>${title}</title>
                 <meta name="description" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
+                <link rel="stylesheet" href="https://gklearnstudy.in/style.css">
                 ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
             <body>
