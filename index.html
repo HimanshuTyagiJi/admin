@@ -502,7 +502,7 @@ input[type=text] {
                     const previewButton = document.createElement('button');
                     previewButton.innerText = 'Preview';
                     previewButton.onclick = function () {
-                         const previewWindow = window.open('', '_blank');
+                        
                         
                           const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
                           const metaAuthor = metaAuthorInput.value;      // Get meta author input
@@ -510,7 +510,7 @@ input[type=text] {
        
                         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
                         const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
-                       
+                        const previewWindow = window.open('', '_blank');
 
 
                         
