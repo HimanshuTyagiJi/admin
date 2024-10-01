@@ -498,15 +498,65 @@ input[type=text] {
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
 
-              if (isAdmin || post.userId === user.uid) {
-                    const previewButton = document.createElement('button');
-                    previewButton.innerText = 'Preview';
-                    previewButton.onclick = function () {
-                        const previewWindow = window.open('', '_blank');
-                        const dynamicTags = generateDynamicTags(post.title);
-                        previewWindow.document.write(`<h1>${post.title}</h1>${dynamicTags}${post.content}`);
-                        previewWindow.document.close();
-                    };
+            if (isAdmin || post.userId === user.uid) {
+    const previewButton = document.createElement('button');
+    previewButton.innerText = 'Preview';
+    previewButton.onclick = function () {
+        const previewWindow = window.open('', '_blank');  // Open a new preview window
+
+        // Make sure these inputs exist and have values
+        const metaKeywords = metaKeywordsInput.value || '';  
+        const metaAuthor = metaAuthorInput.value || '';      
+        
+        const scriptTags = generatepriviewDynamicScriptTags(post.title) || '';  // Generate script tags
+        const styleTag = generatepriviewDynamicStyleTag(post.title) || '';      // Generate style tag
+        
+        // Open the document stream
+        previewWindow.document.open();  
+        
+        // Write the full HTML structure to the new window
+        previewWindow.document.write(`<!DOCTYPE html>
+          <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${post.title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+                ${styleTag}  <!-- Include dynamically generated styles -->
+            </head>
+            <body>
+              <main class="container">
+                <form id="searchForm" onsubmit="performSearch(event);">
+                  <div class="search-container">
+                    <span class="search-icon" id="searchIcon">
+                      <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+                      oninput="updateSuggestions(event)">
+                    <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+                  </div>
+                  <div id="suggestions" class="suggestions-list"></div>
+                </form>
+
+                <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+                  <div class="modal1-content">
+                    <span class="close" onclick="closeModal1(event)">&times;</span>
+                    <h2>Search Results</h2>
+                    <div id="results"></div>
+                  </div>
+                </div>
+              </main>
+              ${post.content}  <!-- Include post content -->
+              ${scriptTags}    <!-- Include dynamically generated scripts -->
+            </body>
+          </html>`);
+        
+        // Close the document stream to signal rendering
+        previewWindow.document.close();  
+    };
+}
+
 
 
                     const editButton = document.createElement('button');
