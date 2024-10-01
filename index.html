@@ -233,8 +233,8 @@ input[type=text] {
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
         
         // Generate dynamic tags (style and script)
-        const scriptTags = generateDynamicScriptTags(title);  // Get script tags
-        const styleTag = generateDynamicStyleTag(title);      // Get style tag
+        const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
+        const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
 
         // Open the preview window
         const previewWindow = window.open('', '_blank');
@@ -278,8 +278,8 @@ input[type=text] {
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
         
         // Generate dynamic tags (style and script)
-        const scriptTags = generateDynamicScriptTags(title);  // Get script tags
-        const styleTag = generateDynamicStyleTag(title);      // Get style tag
+        const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
+        const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
         const previewWindow = window.open('', '_blank');
         
         // Write the HTML into the preview window with proper structure
@@ -641,6 +641,30 @@ function generateDynamicStyleTag(title) {
     const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
     
     const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+    
+    // Return the style tag
+    return styleTag;
+}
+
+
+        
+
+              function generatepriviewDynamicScriptTags(title) {
+    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+          
+    const scriptTag1 = `<script src="https://gklearnstudy.in${prefix}/script.js"><\/script>`;
+    const scriptTag2 = `<script src="https://gklearnstudy.in${prefix}/search.js"><\/script>`;
+    const scriptTag3 = `<script src="https://gklearnstudy.in/${prefix}/menusearch.js"><\/script>`;
+    
+    // Return all script tags
+    return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
+}
+
+// Function to generate dynamic style link tag based on title
+function generatepriviewDynamicStyleTag(title) {
+    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+    
+    const styleTag = `<link rel="stylesheet" href="https://gklearnstudy.in/${prefix}/style.css">`;
     
     // Return the style tag
     return styleTag;
