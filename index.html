@@ -130,14 +130,8 @@ input[type=text] {
 
         <!-- Title Input -->
         <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
-         <input type="text" id="Description" placeholder="Enter Description" style="display: none;" />
-       
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-        <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
-    <div id="imagePreview" style="margin: 10px 0;"></div>
- 
 
 
         <!-- Toolbar for formatting -->
@@ -245,27 +239,8 @@ input[type=text] {
         editPreviewButton.style.display = 'none';
         document.body.appendChild(editPreviewButton);
         const postTitleInput = document.getElementById('postTitle');
-        const metaDescriptionInput = document.getElementById('metaDescription');
         const metaKeywordsInput = document.getElementById('metaKeywords');
         const metaAuthorInput = document.getElementById('metaAuthor');
-        const imageUploadInput = document.getElementById('imageUploadInput');
-       
-        let uploadedImageName = ''; // Variable to store the uploaded image name
-
-        // Image upload and preview logic
-        imageUploadInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];  // Get the uploaded file
-            if (file) {
-                uploadedImageName = file.name;    // Store the image name
-
-                // Show preview of the image
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100px;">`;
-                }
-                reader.readAsDataURL(file);  // Convert the image to a base64 string for preview
-            }
-        });
 
         loadPosts();
 
@@ -282,8 +257,7 @@ input[type=text] {
             postTitleInput.style.display = 'block';
              metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
-            metaDescriptionInput.style.display = 'block';
-           imageUploadInput.style.display = 'block';
+           
             editorContainer.style.display = 'block';
             submitButton.style.display = 'inline-block';
             previewButton.style.display = 'inline-block';
@@ -291,7 +265,6 @@ input[type=text] {
             editPreviewButton.style.display = 'none';
             document.getElementById('toolbar').style.display = 'block';
             postsContainer.style.display = 'none';
-            
         });
 
        previewButton.addEventListener('click', function () {
@@ -302,9 +275,7 @@ input[type=text] {
     if (content && title) {
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const metaDescription = metaDescriptionInput.value;      // Get meta author input
-          const prefix = "uploads"; // Just an example, you can change this based on your need
- 
+        
         // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
         const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
@@ -317,63 +288,20 @@ input[type=text] {
          <!DOCTYPE html>
       <html lang="en">
             <head>
-  <meta charset="UTF-8">
-  <title>${title}</title>
-  <meta name="Description" content="${Description}">
-  <meta name="keywords" content="${metaKeywords}">
-  <meta name="author" content="${metaAuthor}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
-  <meta name="googlebot" content="index, follow">
-  <meta name="bingbot" content="index, follow">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="copyright" content="© 2024 GK Learn Study">
-  <meta name="msvalidate.01" content="63D3DE99AA18A86BEC082BCA9812780E" />
-
-  <!-- Open Graph Meta Tags for Facebook -->
-  <meta property="og:title" content="${title}">
-  <meta property="og:Description" content="${Description}">
-   <meta property="og:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-                   <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="${title}">
-  <meta property="og:locale" content="en_US">
-  
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:Description" content="${Description}">
-  <meta name="twitter:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-  <meta name="twitter:site" content="@gklearnstudy">
-  <meta name="twitter:creator" content="@gklearnstudy">
-  <meta name="twitter:image:alt" content="${uploadedImageName}">
-
-  <!-- Additional Meta Tags -->
-  <meta property="article:section" content="Education">
-  <meta property="article:tag" content="${metaKeywords}">
-  <meta name="theme-color" content="#90EE90">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="${title}">
-  <meta name="application-name" content="${title}">
-  <meta name="msapplication-TileColor" content="#90EE90">
-  <meta name="msapplication-TileImage" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-  <meta name="msapplication-config" content="browserconfig.xml">
-
-  <!-- Social Media Meta Tags -->
-  <meta property="youtube:channel" content="">
-  <meta property="instagram:profile" content="">
-  <meta name="Description" content="${metaKeywords}">
-  ${styleTag}
-  </head>
-     <body>
-            ${content}  
-            ${scriptTags} 
-     </body>
-     </html>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+               ${styleTag}
+           
+            </head>
+            <body>
+                <h1>${title}</h1>
+                ${content}  
+                ${scriptTags} 
+            </body>
+            </html>
         `);
         
         // Close the document stream to render the content
@@ -392,7 +320,6 @@ input[type=text] {
     if (content && title) {
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const metaDescription = metaDescriptionInput.value;      // Get meta author input
         
         // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
@@ -401,66 +328,44 @@ input[type=text] {
         
         // Write the HTML into the preview window with proper structure
         previewWindow.document.write(`
-         <!DOCTYPE html>
+        <!DOCTYPE html>
       <html lang="en">
+       
             <head>
-  <meta charset="UTF-8">
-  <title>${title}</title>
-  <meta name="Description" content="${Description}">
-  <meta name="keywords" content="${metaKeywords}">
-  <meta name="author" content="${metaAuthor}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
-  <meta name="googlebot" content="index, follow">
-  <meta name="bingbot" content="index, follow">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="copyright" content="© 2024 GK Learn Study">
-  <meta name="msvalidate.01" content="63D3DE99AA18A86BEC082BCA9812780E" />
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaKeywords}">
+                <meta name="author" content="${metaAuthor}">
+                
+                ${styleTag}  <!-- CSS link is placed inside the head -->
+            </head>
+            <body>
+                 <main class="container">
+    <form id="searchForm" onsubmit="performSearch(event);">
+      <div class="search-container">
+        <span class="search-icon" id="searchIcon">
+          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+        </span>
+        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+          oninput="updateSuggestions(event)">
+        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions-list"></div>
+    </form>
 
-  <!-- Open Graph Meta Tags for Facebook -->
-  <meta property="og:title" content="${title}">
-  <meta property="og:Description" content="${Description}">
-   <meta property="og:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-                   <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="${title}">
-  <meta property="og:locale" content="en_US">
-  
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:Description" content="${Description}">
-  <meta name="twitter:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-  <meta name="twitter:site" content="@gklearnstudy">
-  <meta name="twitter:creator" content="@gklearnstudy">
-  <meta name="twitter:image:alt" content="${uploadedImageName}">
-
-  <!-- Additional Meta Tags -->
-  <meta property="article:section" content="Education">
-  <meta property="article:tag" content="${metaKeywords}">
-  <meta name="theme-color" content="#90EE90">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="${title}">
-  <meta name="application-name" content="${title}">
-  <meta name="msapplication-TileColor" content="#90EE90">
-  <meta name="msapplication-TileImage" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-  <meta name="msapplication-config" content="browserconfig.xml">
-
-  <!-- Social Media Meta Tags -->
-  <meta property="youtube:channel" content="">
-  <meta property="instagram:profile" content="">
-  <meta name="Description" content="${metaKeywords}">
-  ${styleTag}
-  </head>
-     <body>
-            ${content}  
-            ${scriptTags} 
-     </body>
-     </html>
+    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+      <div class="modal1-content">
+        <span class="close" onclick="closeModal1(event)">&times;</span>
+        <h2>Search Results</h2>
+        <div id="results"></div>
+      </div>
+    </div>
+  </main>
+                ${content}   <!-- Dynamic content is injected here -->
+                ${scriptTags}  <!-- Script is placed just before the closing body tag -->
+            </body>
+            </html>
         `);
         
         // Close the document stream to render the content
@@ -482,8 +387,7 @@ input[type=text] {
             const title = postTitleInput.value;          // Get the post title input
             const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
             const metaAuthor = metaAuthorInput.value;    // Get meta author input
-             const metaDescription = metaDescriptionInput.value;      // Get meta author input
-        
+            
             // Generate dynamic tags
             const scriptTags = generateDynamicScriptTags(title);  // Get script tags
             const styleTag = generateDynamicStyleTag(title);      // Get style tag
@@ -491,65 +395,41 @@ input[type=text] {
             // Raw HTML structure with dynamic variables
             const rawHTML = `
             <!DOCTYPE html>
-      <html lang="en">
-            <head>
-  <meta charset="UTF-8">
-  <title>${title}</title>
-  <meta name="Description" content="${Description}">
-  <meta name="keywords" content="${metaKeywords}">
-  <meta name="author" content="${metaAuthor}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
-  <meta name="googlebot" content="index, follow">
-  <meta name="bingbot" content="index, follow">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="copyright" content="© 2024 GK Learn Study">
-  <meta name="msvalidate.01" content="63D3DE99AA18A86BEC082BCA9812780E" />
+              <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>${title}</title>
+                    <meta name="description" content="${metaKeywords}">
+                    <meta name="author" content="${metaAuthor}">
+                    ${styleTag}
+                </head>
+                <body>
+                  <main class="container">
+                    <form id="searchForm" onsubmit="performSearch(event);">
+                      <div class="search-container">
+                        <span class="search-icon" id="searchIcon">
+                          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+                        </span>
+                        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+                          oninput="updateSuggestions(event)">
+                        <button type="button" id="searchButton"onclick="performSearch()">Search</button>
+                      </div>
+                      <div id="suggestions" class="suggestions-list"></div>
+                    </form>
 
-  <!-- Open Graph Meta Tags for Facebook -->
-  <meta property="og:title" content="${title}">
-  <meta property="og:Description" content="${Description}">
-   <meta property="og:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-                   <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="${title}">
-  <meta property="og:locale" content="en_US">
-  
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:Description" content="${Description}">
-  <meta name="twitter:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-  <meta name="twitter:site" content="@gklearnstudy">
-  <meta name="twitter:creator" content="@gklearnstudy">
-  <meta name="twitter:image:alt" content="${uploadedImageName}">
-
-  <!-- Additional Meta Tags -->
-  <meta property="article:section" content="Education">
-  <meta property="article:tag" content="${metaKeywords}">
-  <meta name="theme-color" content="#90EE90">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="${title}">
-  <meta name="application-name" content="${title}">
-  <meta name="msapplication-TileColor" content="#90EE90">
-  <meta name="msapplication-TileImage" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
-  <meta name="msapplication-config" content="browserconfig.xml">
-
-  <!-- Social Media Meta Tags -->
-  <meta property="youtube:channel" content="">
-  <meta property="instagram:profile" content="">
-  <meta name="Description" content="${metaKeywords}">
-  ${styleTag}
-  </head>
-     <body>
-            ${content}  
-            ${scriptTags} 
-     </body>
-     </html>
+                    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+                      <div class="modal1-content">
+                        <span class="close" onclick="closeModal1(event)">&times;</span>
+                        <h2>Search Results</h2>
+                        <div id="results"></div>
+                      </div>
+                    </div>
+                  </main>
+                  ${content}
+                  ${scriptTags}
+                </body>
+              </html>
             `;
 
             // Format the raw HTML using js-beautify
@@ -571,7 +451,7 @@ input[type=text] {
         postTitleInput.addEventListener('input', updateOutput);
         metaKeywordsInput.addEventListener('input', updateOutput);
         metaAuthorInput.addEventListener('input', updateOutput);
-        
+
           // Dummy functions to avoid errors
         function generateDynamicScriptTags(title) {
             return `<script src="path/to/script.js"><\/script>`; // Replace with your script
@@ -588,7 +468,7 @@ input[type=text] {
             const postTitle = postTitleInput.value;
              const metaKeywords = metaKeywordsInput.value;
             const metaAuthor = metaAuthorInput.value;
-            const metaDescription = metaDescriptionInput.value;   
+
 
             if (await isTitleTaken(postTitle) && !currentEditPostId && status !== "none") {
                 alert("Post title already taken. Please choose another.");
@@ -678,8 +558,7 @@ input[type=text] {
                         postTitleInput.value = post.title;
                          metaKeywordsInput.style.display = 'block';
                          metaAuthorInput.style.display = 'block';
-                  metaDescription.style.display = 'block';
-                         imageUploadInput.style.display = 'block';
+           
                         editorContainer.innerHTML = post.content;
                         postTitleInput.style.display = 'block';
                         editorContainer.style.display = 'block';
@@ -688,7 +567,6 @@ input[type=text] {
                         editPreviewButton.style.display = 'inline-block';
                         previewButton.style.display = 'none';
                         postsContainer.style.display = 'none';
-                        
                         document.getElementById('toolbar').style.display = 'block';
                     };
 
@@ -721,9 +599,8 @@ input[type=text] {
             postTitleInput.value = '';
              metaKeywordsInput.style.display = 'none';
             metaAuthorInput.style.display = 'none';
-             metaDescription.style.display = 'none';
            generatedHTML.style.display = 'none';
-        imageUploadInput.style.display = 'none';
+       
             document.getElementById('toolbar').style.display = 'none';
             editorContainer.style.display = 'none';
             submitButton.style.display = 'none';
