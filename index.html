@@ -128,10 +128,8 @@ input[type=text] {
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
 
- <div class="button-container">
-            <button id="undoBtn">Undo (Ctrl+Z)</button>
-            <button id="redoBtn">Redo (Ctrl+Y)</button>
-        </div>
+ <button id="undoBtn">Undo</button>
+    <button id="redoBtn">Redo</button>
         <!-- Toolbar for formatting -->
         <div id="toolbar" style="display: none;">
             <button onclick="execCmd('bold')">Bold</button>
@@ -158,40 +156,50 @@ input[type=text] {
         <div id="posts" class="posts"></div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
-<script>
-const undoBtn = document.getElementById("undoBtn");
-const redoBtn = document.getElementById("redoBtn");
+    <script>
+        let undoStack = [];
+        let redoStack = [];
 
-let undoStack = [];
-let redoStack = [];
+        // Function to save state - you can call this function manually whenever needed
+        function saveState(state) {
+            undoStack.push(state);
+            redoStack = []; // clear redoStack when a new state is saved
+        }
 
+        // Undo function
+        function undo() {
+            if (undoStack.length > 1) {
+                redoStack.push(undoStack.pop()); // move current state to redoStack
+                let prevState = undoStack[undoStack.length - 1];
+                applyState(prevState); // apply the last saved state
+            }
+        }
 
+        // Redo function
+        function redo() {
+            if (redoStack.length > 0) {
+                let nextState = redoStack.pop();
+                undoStack.push(nextState); // move state back to undoStack
+                applyState(nextState); // apply the redo state
+            }
+        }
 
-undoBtn.addEventListener('click', () => {
-    if (undoStack.length > 0) {
-        redoStack.push(undoStack.pop());
-        editor.value = undoStack[undoStack.length - 1] || '';
-    }
-});
+        // Apply the state to any element or logic (this can be customized)
+        function applyState(state) {
+            console.log("Applying state:", state);
+            // Example: set the innerHTML of an element, or any other operation
+            // document.getElementById('yourElementId').innerHTML = state;
+        }
 
-redoBtn.addEventListener('click', () => {
-    if (redoStack.length > 0) {
-        const redoAction = redoStack.pop();
-        undoStack.push(redoAction);
-        editor.value = redoAction;
-    }
-});
+        // Add event listeners to buttons
+        document.getElementById("undoBtn").addEventListener('click', undo);
+        document.getElementById("redoBtn").addEventListener('click', redo);
 
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 'z') {
-        undoBtn.click();
-    }
-    if (e.ctrlKey && e.key === 'y') {
-        redoBtn.click();
-    }
-});
-</script>
+        // Example to save a state (this should be called manually in your logic)
+        saveState("Initial State"); // Example: First saved state
+        saveState("Modified State 1"); // Example: Another saved state
+    </script>
+
    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
