@@ -135,7 +135,7 @@ input[type=text] {
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-    <input type="file" id="imageUploadInput" accept="image/*">
+    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
     <div id="imagePreview" style="margin: 10px 0;"></div>
  
 
@@ -283,7 +283,7 @@ input[type=text] {
              metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
             metadescriptionInput.style.display = 'block';
-           
+           imageUploadInput.style.display = 'block';
             editorContainer.style.display = 'block';
             submitButton.style.display = 'inline-block';
             previewButton.style.display = 'inline-block';
@@ -291,6 +291,7 @@ input[type=text] {
             editPreviewButton.style.display = 'none';
             document.getElementById('toolbar').style.display = 'block';
             postsContainer.style.display = 'none';
+            
         });
 
        previewButton.addEventListener('click', function () {
@@ -679,6 +680,7 @@ input[type=text] {
                          metaKeywordsInput.style.display = 'block';
                          metaAuthorInput.style.display = 'block';
                   metadescription.style.display = 'block';
+                         imageUploadInput.style.display = 'block';
                         editorContainer.innerHTML = post.content;
                         postTitleInput.style.display = 'block';
                         editorContainer.style.display = 'block';
@@ -687,6 +689,7 @@ input[type=text] {
                         editPreviewButton.style.display = 'inline-block';
                         previewButton.style.display = 'none';
                         postsContainer.style.display = 'none';
+                        
                         document.getElementById('toolbar').style.display = 'block';
                     };
 
@@ -721,7 +724,7 @@ input[type=text] {
             metaAuthorInput.style.display = 'none';
              metadescription.style.display = 'none';
            generatedHTML.style.display = 'none';
-       
+        imageUploadInput.style.display = 'none';
             document.getElementById('toolbar').style.display = 'none';
             editorContainer.style.display = 'none';
             submitButton.style.display = 'none';
