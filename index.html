@@ -130,7 +130,7 @@ input[type=text] {
 
         <!-- Title Input -->
         <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
-         <input type="text" id="description" placeholder="Enter description" style="display: none;" />
+         <input type="text" id="Description" placeholder="Enter Description" style="display: none;" />
        
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
@@ -245,7 +245,7 @@ input[type=text] {
         editPreviewButton.style.display = 'none';
         document.body.appendChild(editPreviewButton);
         const postTitleInput = document.getElementById('postTitle');
-        const metadescriptionInput = document.getElementById('metadescription');
+        const metaDescriptionInput = document.getElementById('metaDescription');
         const metaKeywordsInput = document.getElementById('metaKeywords');
         const metaAuthorInput = document.getElementById('metaAuthor');
         const imageUploadInput = document.getElementById('imageUploadInput');
@@ -282,7 +282,7 @@ input[type=text] {
             postTitleInput.style.display = 'block';
              metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
-            metadescriptionInput.style.display = 'block';
+            metaDescriptionInput.style.display = 'block';
            imageUploadInput.style.display = 'block';
             editorContainer.style.display = 'block';
             submitButton.style.display = 'inline-block';
@@ -302,7 +302,7 @@ input[type=text] {
     if (content && title) {
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const metadescription = metadescriptionInput.value;      // Get meta author input
+         const metaDescription = metaDescriptionInput.value;      // Get meta author input
           const prefix = "uploads"; // Just an example, you can change this based on your need
  
         // Generate dynamic tags (style and script)
@@ -319,7 +319,7 @@ input[type=text] {
             <head>
   <meta charset="UTF-8">
   <title>${title}</title>
-  <meta name="description" content="${description}">
+  <meta name="Description" content="${Description}">
   <meta name="keywords" content="${metaKeywords}">
   <meta name="author" content="${metaAuthor}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -332,7 +332,7 @@ input[type=text] {
 
   <!-- Open Graph Meta Tags for Facebook -->
   <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
+  <meta property="og:Description" content="${Description}">
    <meta property="og:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
                    <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
   <meta property="og:type" content="website">
@@ -345,7 +345,7 @@ input[type=text] {
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:Description" content="${Description}">
   <meta name="twitter:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
   <meta name="twitter:site" content="@gklearnstudy">
   <meta name="twitter:creator" content="@gklearnstudy">
@@ -366,7 +366,7 @@ input[type=text] {
   <!-- Social Media Meta Tags -->
   <meta property="youtube:channel" content="">
   <meta property="instagram:profile" content="">
-  <meta name="description" content="${metaKeywords}">
+  <meta name="Description" content="${metaKeywords}">
   ${styleTag}
   </head>
      <body>
@@ -392,7 +392,7 @@ input[type=text] {
     if (content && title) {
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const metadescription = metadescriptionInput.value;      // Get meta author input
+         const metaDescription = metaDescriptionInput.value;      // Get meta author input
         
         // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
@@ -406,7 +406,7 @@ input[type=text] {
             <head>
   <meta charset="UTF-8">
   <title>${title}</title>
-  <meta name="description" content="${description}">
+  <meta name="Description" content="${Description}">
   <meta name="keywords" content="${metaKeywords}">
   <meta name="author" content="${metaAuthor}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -419,7 +419,7 @@ input[type=text] {
 
   <!-- Open Graph Meta Tags for Facebook -->
   <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
+  <meta property="og:Description" content="${Description}">
    <meta property="og:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
                    <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
   <meta property="og:type" content="website">
@@ -432,7 +432,7 @@ input[type=text] {
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:Description" content="${Description}">
   <meta name="twitter:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
   <meta name="twitter:site" content="@gklearnstudy">
   <meta name="twitter:creator" content="@gklearnstudy">
@@ -453,7 +453,7 @@ input[type=text] {
   <!-- Social Media Meta Tags -->
   <meta property="youtube:channel" content="">
   <meta property="instagram:profile" content="">
-  <meta name="description" content="${metaKeywords}">
+  <meta name="Description" content="${metaKeywords}">
   ${styleTag}
   </head>
      <body>
@@ -482,7 +482,7 @@ input[type=text] {
             const title = postTitleInput.value;          // Get the post title input
             const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
             const metaAuthor = metaAuthorInput.value;    // Get meta author input
-             const metadescription = metadescriptionInput.value;      // Get meta author input
+             const metaDescription = metaDescriptionInput.value;      // Get meta author input
         
             // Generate dynamic tags
             const scriptTags = generateDynamicScriptTags(title);  // Get script tags
@@ -495,7 +495,7 @@ input[type=text] {
             <head>
   <meta charset="UTF-8">
   <title>${title}</title>
-  <meta name="description" content="${description}">
+  <meta name="Description" content="${Description}">
   <meta name="keywords" content="${metaKeywords}">
   <meta name="author" content="${metaAuthor}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -508,7 +508,7 @@ input[type=text] {
 
   <!-- Open Graph Meta Tags for Facebook -->
   <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
+  <meta property="og:Description" content="${Description}">
    <meta property="og:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
                    <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
   <meta property="og:type" content="website">
@@ -521,7 +521,7 @@ input[type=text] {
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:Description" content="${Description}">
   <meta name="twitter:image" content="https://gklearnstudy.in/${prefix}/${uploadedImageName}">
   <meta name="twitter:site" content="@gklearnstudy">
   <meta name="twitter:creator" content="@gklearnstudy">
@@ -542,7 +542,7 @@ input[type=text] {
   <!-- Social Media Meta Tags -->
   <meta property="youtube:channel" content="">
   <meta property="instagram:profile" content="">
-  <meta name="description" content="${metaKeywords}">
+  <meta name="Description" content="${metaKeywords}">
   ${styleTag}
   </head>
      <body>
@@ -571,7 +571,7 @@ input[type=text] {
         postTitleInput.addEventListener('input', updateOutput);
         metaKeywordsInput.addEventListener('input', updateOutput);
         metaAuthorInput.addEventListener('input', updateOutput);
-       metadescriptionInput.addEventListener('input', updateOutput);     // Get meta author input
+       metaDescriptionInput.addEventListener('input', updateOutput);     // Get meta author input
         
           // Dummy functions to avoid errors
         function generateDynamicScriptTags(title) {
@@ -589,7 +589,7 @@ input[type=text] {
             const postTitle = postTitleInput.value;
              const metaKeywords = metaKeywordsInput.value;
             const metaAuthor = metaAuthorInput.value;
-            const metadescription = metadescriptionInput.value;   
+            const metaDescription = metaDescriptionInput.value;   
 
             if (await isTitleTaken(postTitle) && !currentEditPostId && status !== "none") {
                 alert("Post title already taken. Please choose another.");
@@ -679,7 +679,7 @@ input[type=text] {
                         postTitleInput.value = post.title;
                          metaKeywordsInput.style.display = 'block';
                          metaAuthorInput.style.display = 'block';
-                  metadescription.style.display = 'block';
+                  metaDescription.style.display = 'block';
                          imageUploadInput.style.display = 'block';
                         editorContainer.innerHTML = post.content;
                         postTitleInput.style.display = 'block';
@@ -722,7 +722,7 @@ input[type=text] {
             postTitleInput.value = '';
              metaKeywordsInput.style.display = 'none';
             metaAuthorInput.style.display = 'none';
-             metadescription.style.display = 'none';
+             metaDescription.style.display = 'none';
            generatedHTML.style.display = 'none';
         imageUploadInput.style.display = 'none';
             document.getElementById('toolbar').style.display = 'none';
