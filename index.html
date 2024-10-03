@@ -131,13 +131,52 @@ input[type=text] {
 
         <!-- Toolbar for formatting -->
         <div id="toolbar" style="display: none;">
-            <button onclick="execCmd('bold')">Bold</button>
-            <button onclick="execCmd('justifyLeft')">Left</button>
-            <button onclick="execCmd('justifyCenter')">Center</button>
-            <button onclick="execCmd('justifyRight')">Right</button>
-            <button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
-             <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
-                   
+           <button onclick="execCmd('formatBlock', false, 'p')">Paragraph</button>
+                    <button onclick="execCmd('bold')">Bold</button>
+                    <button onclick="execCmd('italic')">Italic</button>
+                    <button onclick="execCmd('underline')">Underline</button>
+                    <button onclick="execCmd('justifyLeft')">Left</button>
+                    <button onclick="execCmd('justifyCenter')">Center</button>
+                    <button onclick="execCmd('justifyRight')">Right</button>
+                    <button onclick="execCmd('insertOrderedList')">Ordered List</button>
+                        <button onclick="createList('insertOrderedList', 'upper-alpha')">Upper Alpha List</button>
+                        <button onclick="createList('insertOrderedList', 'lower-alpha')">Lower Alpha List</button>
+                        <button onclick="createList('insertOrderedList', 'upper-roman')">Upper Roman List</button>
+                        <button onclick="createList('insertOrderedList', 'lower-roman')">Lower Roman List</button>
+                        <button onclick="createList('insertUnorderedList', 'disc')">Disc Bullets List</button>
+                        <button onclick="createList('insertUnorderedList', 'circle')">Circle Bullets List</button>
+                        <button onclick="createList('insertUnorderedList', 'square')">Square Bullets List</button>
+                        
+                        <!-- Corrected button for disc list -->
+                        <button onclick="execCmd('insertUnorderedList', 'disc')">Disc List</button>
+                        
+                    <button onclick="execCmd('superscript')">x<sup>2</sup></button>
+                    <button onclick="execCmd('subscript')">x<sub>2</sub></button>
+                    <button onclick="insertTable()">Table</button>
+                    <button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
+                    <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
+                    <button onclick="insertContentDiv3()"><div class="color-content2">center paragraph Heading 2</div></button>
+                    <button onclick="insertPC3()"><div class="color-content3">Main Paragraph  3</div></button>
+                    <button onclick="insertPC4()"><div class="color-content4">Paragraph bold 4</div></button>
+                    <button onclick="insertPC5()"><div class="color-content5">Type 5</div></button>
+                    <button onclick="insertPC6()"><div class="color-content6">Not Id Type point 6</div></button>
+                    <button onclick="insertPC6()"><div class="color-content6">Type point 6</div></button>
+                    <button onclick="insertPC7()"><div class="color-content7">Type to type line 7</div></button>
+                    <button onclick="insertPC8()"><div class="color-content8">Type to type  point 8</div></button>
+                    <button onclick="insertPEXC()"><div class="color-content9">Example</div></button>
+                    <button onclick="insertOLC()"><div class="color-content5">Order list</div></button>
+                    <button onclick="insertUOLC()"><div class="color-content5">Unoder list</div> </button>
+                    <button onclick="insertBGCC1()"><div class="pink-background"> Bg pink</div></button>
+                    <button onclick="insertBGCC2()"><div class="blue-background">Bg blue</div></button>
+                    <button onclick="insertBGCC3()"><div class="blue1-background">Bg blue1</div></button>
+                    <button onclick="insertBGCC4()"><div class="green-background">Bg green</div></button>
+                    <button onclick="insertBGCC5()"><div class="yellow-background">Bg yellow</div></button>
+                    <button onclick="insertBGCC6()"><div class="orange-background">Bg orange</div></button>
+                    <button onclick="insertCR()">Column/Row</button>
+                    <button onclick="insertCR1()">Column/Row 1</button>
+                        <button onclick="insertLineBreaks()">One Line Break</button>
+                            <button onclick="formatHTML()">Format HTML</button>
+                                   
             
         </div>
 
@@ -639,7 +678,29 @@ function generatepriviewDynamicStyleTag(title) {
 
 <script>
 
- function insertContentDiv1() {
+ function insertTable() {
+            var rows = prompt("Enter the number of rows", "2");
+            var cols = prompt("Enter the number of columns", "2");
+            var table = "<table id='myTable' border='1'>";
+            table += "<thead><tr>";
+            for (var i = 0; i < cols; i++) {
+                table += "<th>&nbsp;</th>";
+            }
+            table += "</tr></thead><tbody>";
+            for (var i = 0; i < rows; i++) {
+                table += "<tr>";
+                for (var j = 0; j < cols; j++) {
+                    table += "<td>&nbsp;</td>";
+                }
+                table += "</tr>";
+            }
+            table += "</tbody></table>";
+            document.execCommand('insertHTML', false, table);
+            updateOutput();
+            moveCursorToEnd();
+        } 
+
+        function insertContentDiv1() {
             var html = `<h1 id="${document.getSelection()}"><b class="color-content1">${document.getSelection()}</b></h1>`;
                 document.execCommand('insertHTML', false, html);
             updateOutput();
@@ -652,6 +713,142 @@ function generatepriviewDynamicStyleTag(title) {
             updateOutput();
             moveCursorToEnd();
         }
+
+        function insertContentDiv3() {
+            var html = `<h2 id="${document.getSelection()}"><b class="color-content2">${document.getSelection()}</b></h2>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPC3() {
+            var html = `<p id="${document.getSelection()}"><b class="color-content3">${document.getSelection()}</b></p>`;
+           document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPC4() {
+            var html = `<p id="${document.getSelection()}"><b class="color-content4">${document.getSelection()}</b></p>`;
+           document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPC5() {
+            var html = `<p id="${document.getSelection()}"><b class="color-content5">${document.getSelection()}</b></p>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPC6() {
+            var html = `<p><b class="color-content6">${document.getSelection()}</b></p>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPC7() {
+            var html = `<p id="${document.getSelection()}"><b class="color-content7">${document.getSelection()}</b></p>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPC8() {
+            var html = `<p id="${document.getSelection()}"><b class="color-content8">${document.getSelection()}</b></p>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertPEXC() {
+            var html = `<b class="color-content9">${document.getSelection()}</b>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertOLC() {
+            var id = prompt("Enter the ID for the content div", "list");
+            var content = `<ol class="custom-ol"><li>${id}</li></ol>`;
+            document.execCommand('insertHTML', false, content);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertUOLC() {
+            var id = prompt("Enter the ID for the content div", "list");
+            var content = `<ul><li>${id}</li></ul>`;
+            document.execCommand('insertHTML', false, content);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertBGCC1() {
+            var html = `<div class="pink-background">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+        }
+
+        function insertBGCC2() {
+            var html = `<div class="blue-background">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+        }
+
+        function insertBGCC3() {
+            var html = `<div class="blue1-background">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+        }
+
+        function insertBGCC4() {
+            var html = `<div class="green-background">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+        }
+
+        function insertBGCC5() {
+            var html = `<div class="yellow-background">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+        }
+
+        function insertBGCC6() {
+            var html = `<div class="orange-background">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+        }
+
+        function insertCR() {
+            var html = `<div class="custom-container"><div class="custom-row"><div class="custom-column">${document.getSelection()}</div></div></div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertCR1() {
+            var html = `<div class="custom-column">${document.getSelection()}</div>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+        function insertParagraph() {
+            var html = `<p>${document.getSelection()}</p>`;
+            document.execCommand('insertHTML', false, html);
+            updateOutput();
+            moveCursorToEnd();
+        } 
+         function insertLineBreaks() {
+            document.execCommand('insertHTML', false, '<br>');
+            updateOutput();
+            moveCursorToEnd();
+        }
+
+
 
     
     function execCmd(command, value = null) {
