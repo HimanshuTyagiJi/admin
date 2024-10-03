@@ -113,7 +113,16 @@ input[type=text] {
      
     </style>
 </head>
-<body>
+<body><script>
+    function createList(type, styleType) {
+        document.execCommand(type);
+        var lists = document.querySelectorAll(type === 'insertOrderedList' ? 'ol' : 'ul');
+        var lastList = lists[lists.length - 1];
+        if (lastList) {
+            lastList.style.listStyleType = styleType;
+        }
+    }
+    </script>
 
     <div class="header">
         <button id="createPostButton">Create Post</button>
@@ -129,6 +138,9 @@ input[type=text] {
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
 
 
+       
+            <button class="menu-toggle" onclick="toggleMenu()">➤</button>
+            <ul class="menu-list" id="menuList">
         <!-- Toolbar for formatting -->
         <div id="toolbar" style="display: none;">
             <button onclick="execCmd('bold')">Bold</button>
@@ -139,7 +151,7 @@ input[type=text] {
              <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
                    
             
-        </div>
+        </div></ul>
 
         <!-- Content editor -->
         <div contenteditable="true" id="postContent" style="text-align:left;margin:5px; padding: 10px; border: 1px solid #ddd; min-height: 150px; margin-top: 10px; display: none;"></div>
