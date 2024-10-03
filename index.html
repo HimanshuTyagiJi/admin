@@ -121,12 +121,24 @@ input[type=text] {
     </style>
 </head>
 <body>
- <div class="contained">
+
     <div class="header">
         <button id="createPostButton">Create Post</button>
         <button style="margin-left: 52%;" id="logoutButton">Logout</button>
     </div>
+   <div id="toolbar" style="display: none;"> 
 
+       <button class="menu-toggle" onclick="toggleMenu()">➤</button>
+  <ul class="menu-list" id="menuList">
+           <li> <button onclick="execCmd('bold')">Bold</button></li>
+           <li> <button onclick="execCmd('justifyLeft')">Left</button></li>
+           <li><button onclick="execCmd('justifyCenter')">Center</button></li>
+            <button onclick="execCmd('justifyRight')">Right</button>
+            <button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
+             <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
+                   
+            </ul>
+        </div> <div class="container">
     <div class="admin-container">
        
 
@@ -139,17 +151,7 @@ input[type=text] {
        
           
         <!-- Toolbar for formatting -->
-        <div id="toolbar" style="display: none;">  <button class="menu-toggle" onclick="toggleMenu()">➤</button>
-            <ul class="menu-list" id="menuList">
-           <li> <button onclick="execCmd('bold')">Bold</button></li>
-           <li> <button onclick="execCmd('justifyLeft')">Left</button></li>
-           <li><button onclick="execCmd('justifyCenter')">Center</button></li>
-            <button onclick="execCmd('justifyRight')">Right</button>
-            <button onclick="insertContentDiv1()"><div class="color-content1">Heading 1</div></button>
-             <button onclick="insertContentDiv2()"><div class="color-content1">Heading 2</div></button>
-                   
-            </ul>
-        </div>
+     
 
         <!-- Content editor -->
         <div contenteditable="true" id="postContent" style="text-align:left;margin:5px; padding: 10px; border: 1px solid #ddd; min-height: 150px; margin-top: 10px; display: none;"></div>
