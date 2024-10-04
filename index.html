@@ -130,6 +130,8 @@ input[type=text] {
 
         <!-- Title Input -->
         <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
+         <input type="text" id="metaDescription" placeholder="Enter Description" style="display: none;" />
+
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
 
@@ -239,6 +241,7 @@ input[type=text] {
         editPreviewButton.style.display = 'none';
         document.body.appendChild(editPreviewButton);
         const postTitleInput = document.getElementById('postTitle');
+        const metaDescriptionInput = document.getElementById('metaDescription');
         const metaKeywordsInput = document.getElementById('metaKeywords');
         const metaAuthorInput = document.getElementById('metaAuthor');
 
@@ -255,6 +258,7 @@ input[type=text] {
         createPostButton.addEventListener('click', function () {
             resetEditor();
             postTitleInput.style.display = 'block';
+             metaDescriptionInput.style.display = 'block';
              metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
            
@@ -273,6 +277,7 @@ input[type=text] {
 
     // Check if content and title are filled in
     if (content && title) {
+          const metaDescription = metaDescriptionInput.value;
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
         
@@ -291,7 +296,8 @@ input[type=text] {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>${title}</title>
-                <meta name="description" content="${metaKeywords}">
+                <meta name="description" content="${metaDescription}">
+                <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
                ${styleTag}
            
@@ -320,7 +326,7 @@ input[type=text] {
     if (content && title) {
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
-        
+         const metaDescription = metaDescriptionInput.value;
         // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
         const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
@@ -335,7 +341,8 @@ input[type=text] {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>${title}</title>
-                <meta name="description" content="${metaKeywords}">
+                 <meta name="description" content="${metaDescription}">
+                <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
                 
                 ${styleTag}  <!-- CSS link is placed inside the head -->
@@ -387,7 +394,7 @@ input[type=text] {
             const title = postTitleInput.value;          // Get the post title input
             const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
             const metaAuthor = metaAuthorInput.value;    // Get meta author input
-            
+             const metaDescription = metaDescriptionInput.value;
             // Generate dynamic tags
             const scriptTags = generateDynamicScriptTags(title);  // Get script tags
             const styleTag = generateDynamicStyleTag(title);      // Get style tag
@@ -400,7 +407,8 @@ input[type=text] {
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>${title}</title>
-                    <meta name="description" content="${metaKeywords}">
+                    <meta name="description" content="${metaDescription}">
+                <meta name="keywords" content="${metaKeywords}">
                     <meta name="author" content="${metaAuthor}">
                     ${styleTag}
                 </head>
@@ -449,6 +457,7 @@ input[type=text] {
         // Automatically update output on content change
         editorContainer.addEventListener('input', updateOutput);
         postTitleInput.addEventListener('input', updateOutput);
+         metaDescriptionInput.addEventListener('input', updateOutput);
         metaKeywordsInput.addEventListener('input', updateOutput);
         metaAuthorInput.addEventListener('input', updateOutput);
 
