@@ -134,9 +134,6 @@ input[type=text] {
 
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-       <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)" />
-    <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100%; height: auto; margin-top: 10px;"/>
-
 
 
         <!-- Toolbar for formatting -->
@@ -224,30 +221,7 @@ input[type=text] {
     const db = getFirestore(app);
 
     let currentEditPostId = null;
-   let imageUploadName = ""; // Variable to store image upload name
 
-        function uploadImage() {
-            const fileInput = document.getElementById('imageUpload');
-            const file = fileInput.files[0]; // Get the first file
-            
-            if (file) {
-                // Create a reference to the storage location
-                const storageRef = firebase.storage().ref(`images/${file.name}`);
-
-                // Upload the file
-                storageRef.put(file).then(snapshot => {
-                    console.log('Uploaded a blob or file!', snapshot);
-                    
-                    // Get the download URL
-                    storageRef.getDownloadURL().then(url => {
-                        imageUploadName = file.name; // Store the name of the uploaded image
-                        console.log('File available at', url);
-                    });
-                }).catch(error => {
-                    console.error('Upload failed:', error);
-                });
-            }
-        }
     document.addEventListener('DOMContentLoaded', function () {
         const logoutButton = document.getElementById('logoutButton');
         const saveDraftButton = document.createElement('button');
@@ -271,8 +245,6 @@ input[type=text] {
         const metaKeywordsInput = document.getElementById('metaKeywords');
         const metaAuthorInput = document.getElementById('metaAuthor');
 
-
-        
         loadPosts();
 
         onAuthStateChanged(auth, (user) => {
@@ -327,9 +299,6 @@ input[type=text] {
                 <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-     <meta property="og:image" content="https://gklearnstudy.in/image/${imageUploadName}"> 
-                      
-                    
                ${styleTag}
            
             </head>
@@ -346,20 +315,7 @@ input[type=text] {
     } else {
         alert('Please fill in the title and content to preview.');
     }
-});function previewImage(event) {
-        const imagePreview = document.getElementById('imagePreview');
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                imagePreview.src = reader.result;
-                imagePreview.style.display = 'block';
-                uploadedImageURL = reader.result;  // Store the image URL to use in preview
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+});
 
 
        editPreviewButton.addEventListener('click', function () {
@@ -388,8 +344,6 @@ input[type=text] {
                  <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                       <meta property="og:image" content="https://gklearnstudy.in/image/${imageUploadName}"> 
-                      
                 
                 ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
@@ -456,8 +410,6 @@ input[type=text] {
                     <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                     <meta name="author" content="${metaAuthor}">
-                      <meta property="og:image" content="https://gklearnstudy.in/image/${imageUploadName}"> 
-                       
                     ${styleTag}
                 </head>
                 <body>
