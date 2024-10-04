@@ -788,7 +788,7 @@ function generateDynamicStyleTag(title) {
 }
 
 function generateDynamicTags(title) {
-            const prefix = title.split('/').map(() => '..').join('/');
+            const prefix = title.split('/').map(() => '').join('/');
             const scriptTag1 = `<script src="https://gklearnstudy.in/${prefix}/script.js"><\/script>`;
             const scriptTag2 = `<script src="https://gklearnstudy.in/${prefix}/search.js"><\/script>`;
             const scriptTag3 = `<script src="https://gklearnstudy.in/${prefix}/menusearch.js"><\/script>`;
@@ -799,7 +799,7 @@ function generateDynamicTags(title) {
         
 
               function generatepriviewDynamicScriptTags(title) {
-    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
           
     const scriptTag1 = `<script src="https://gklearnstudy.in${prefix}/script.js"><\/script>`;
     const scriptTag2 = `<script src="https://gklearnstudy.in${prefix}/search.js"><\/script>`;
