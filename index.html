@@ -134,7 +134,8 @@ input[type=text] {
 
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-     <input type="file" id="imageUpload" accept="image/*" onchange="uploadImage(event)" />
+       <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)" />
+    <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100%; height: auto; margin-top: 10px;"/>
 
 
 
@@ -221,37 +222,9 @@ input[type=text] {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-const storage = getStorage(app);
+
     let currentEditPostId = null;
-// Function to upload the image
-function uploadImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const storageRef = ref(storage, 'images/' + file.name); // Store image in Firebase Storage under 'images/' folder
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on('state_changed', 
-        (snapshot) => {
-            // Track the progress of the upload
-        }, 
-        (error) => {
-            console.error('Image upload failed:', error);
-        }, 
-        () => {
-            // Image upload successful
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
-
-                // Update the meta tag for og:image
-                document.querySelector('meta[property="og:image"]').setAttribute('content', downloadURL);
-
-                // Use this URL dynamically in your preview or post
-                generatepriviewDynamicScriptTags(downloadURL);  // Pass this URL to your preview function
-            });
-        }
-    );
-}
+let uploadedImageURL = null;
     document.addEventListener('DOMContentLoaded', function () {
         const logoutButton = document.getElementById('logoutButton');
         const saveDraftButton = document.createElement('button');
@@ -312,8 +285,7 @@ function uploadImage(event) {
           const metaDescription = metaDescriptionInput.value;
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const imageURL = document.querySelector('meta[property="og:image"]').getAttribute('content');
-
+        
         // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
         const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
@@ -350,7 +322,20 @@ function uploadImage(event) {
     } else {
         alert('Please fill in the title and content to preview.');
     }
-});
+});function previewImage(event) {
+        const imagePreview = document.getElementById('imagePreview');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                imagePreview.src = reader.result;
+                imagePreview.style.display = 'block';
+                uploadedImageURL = reader.result;  // Store the image URL to use in preview
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
 
        editPreviewButton.addEventListener('click', function () {
@@ -362,8 +347,6 @@ function uploadImage(event) {
         const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
          const metaDescription = metaDescriptionInput.value;
-         const imageURL = document.querySelector('meta[property="og:image"]').getAttribute('content');
-
         // Generate dynamic tags (style and script)
         const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
         const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
@@ -434,8 +417,6 @@ function uploadImage(event) {
             const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
             const metaAuthor = metaAuthorInput.value;    // Get meta author input
              const metaDescription = metaDescriptionInput.value;
-             const imageURL = document.querySelector('meta[property="og:image"]').getAttribute('content');
-
             // Generate dynamic tags
             const scriptTags = generateDynamicScriptTags(title);  // Get script tags
             const styleTag = generateDynamicStyleTag(title);      // Get style tag
@@ -451,7 +432,7 @@ function uploadImage(event) {
                     <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                     <meta name="author" content="${metaAuthor}">
-                                            <meta property="og:image" content="${imageURL}">
+                                            <meta property="og:image" content="${uploadedImageURL}">
                     
                     ${styleTag}
                 </head>
