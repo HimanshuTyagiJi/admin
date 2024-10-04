@@ -95,8 +95,6 @@ input[type=text] {
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }[data-theme="dark"] {#toolbar button {color:white;
-          
         }
     
   
@@ -115,7 +113,9 @@ input[type=text] {
             font-size: 12px;
         }
         
-     
+     [data-theme="dark"] {#toolbar button {color:white;
+          
+        }
     </style>
 </head>
 <body>
@@ -707,7 +707,8 @@ input[type=text] {
                         postTitleInput.value = post.title;
                          metaKeywordsInput.style.display = 'block';
                          metaAuthorInput.style.display = 'block';
-           
+           metaDescription.style.display = 'block';
+       
                         editorContainer.innerHTML = post.content;
                         postTitleInput.style.display = 'block';
                         editorContainer.style.display = 'block';
@@ -749,6 +750,7 @@ input[type=text] {
              metaKeywordsInput.style.display = 'none';
             metaAuthorInput.style.display = 'none';
            generatedHTML.style.display = 'none';
+       metaDescription.style.display = 'none';
        
             document.getElementById('toolbar').style.display = 'none';
             editorContainer.style.display = 'none';
@@ -765,13 +767,26 @@ input[type=text] {
             window.location.href = 'login.html';
         }
 
-       
-      function generateDynamicScriptTags(title) {
-    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
-          
-    const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
-    const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
-    const scriptTag3 = `<script src="${prefix}/menusearch.js"><\/script>`;
+   function generateDynamicScriptTags(title) {
+    let prefix;
+    const slashCount = (title.match(/\//g) || []).length; // Count the number of slashes in the title
+
+    if (slashCount === 0) {
+        prefix = ''; // No slashes
+    } else if (slashCount === 1) {
+        prefix = '../'; // Single slash
+    } else {
+        prefix = title.split('/').map(() => '').join('/'); // More than one slash
+    }
+
+    // Adjust script filename based on slashes
+    const script1 = `${prefix}script.js`;
+    const script2 = `${prefix}search.js`;
+    const script3 = `${prefix}menusearch${slashCount === 1 ? '1' : ''}.js`;
+
+    const scriptTag1 = `<script src="${script1}"><\/script>`;
+    const scriptTag2 = `<script src="${script2}"><\/script>`;
+    const scriptTag3 = `<script src="${script3}"><\/script>`;
     
     // Return all script tags
     return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
@@ -779,45 +794,59 @@ input[type=text] {
 
 // Function to generate dynamic style link tag based on title
 function generateDynamicStyleTag(title) {
-    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
-    
-    const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
+    let prefix;
+    const slashCount = (title.match(/\//g) || []).length; // Count the number of slashes in the title
+
+    if (slashCount === 0) {
+        prefix = ''; // No slashes
+    } else if (slashCount === 1) {
+        prefix = '../'; // Single slash
+    } else {
+        prefix = title.split('/').map(() => '').join('/'); // More than one slash
+    }
+
+    const styleTag = `<link rel="stylesheet" href="${prefix}style.css">`;
     
     // Return the style tag
     return styleTag;
 }
-
+// Function to generate dynamic tags for production URLs
 function generateDynamicTags(title) {
-            const prefix = title.split('/').map(() => '').join('/');
-            const scriptTag1 = `<script src="https://gklearnstudy.in/${prefix}/script.js"><\/script>`;
-            const scriptTag2 = `<script src="https://gklearnstudy.in/${prefix}/search.js"><\/script>`;
-            const scriptTag3 = `<script src="https://gklearnstudy.in/${prefix}/menusearch.js"><\/script>`;
-            const styleTag = `<link rel="stylesheet" href="https://gklearnstudy.in/${prefix}/style.css">`;
-
-            return `${styleTag}\n${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
-        }
-        
-
-              function generatepriviewDynamicScriptTags(title) {
-    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
-          
-    const scriptTag1 = `<script src="https://gklearnstudy.in${prefix}/script.js"><\/script>`;
-    const scriptTag2 = `<script src="https://gklearnstudy.in${prefix}/search.js"><\/script>`;
-    const scriptTag3 = `<script src="https://gklearnstudy.in/${prefix}/menusearch.js"><\/script>`;
+    const prefix = title.includes('/') ? '../' : ''; // Add ../ if there's a slash in the title
+    const menusearchFile = title.includes('/') ? 'menusearch1.js' : 'menusearch.js'; // Choose menusearch1.js if slash exists
     
-    // Return all script tags
+    const scriptTag1 = `<script src="https://gklearnstudy.in/${prefix}script.js"><\/script>`;
+    const scriptTag2 = `<script src="https://gklearnstudy.in/${prefix}search.js"><\/script>`;
+    const scriptTag3 = `<script src="https://gklearnstudy.in/${prefix}${menusearchFile}"><\/script>`;
+    const styleTag = `<link rel="stylesheet" href="https://gklearnstudy.in/${prefix}style.css">`;
+
+    // Return all tags combined
+    return `${styleTag}\n${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
+}
+
+// Function to generate preview dynamic script tags for preview purposes
+function generatepreviewDynamicScriptTags(title) {
+    const prefix = title.includes('/') ? '../' : ''; // Add ../ if there's a slash in the title
+    const menusearchFile = title.includes('/') ? 'menusearch1.js' : 'menusearch.js'; // Choose menusearch1.js if slash exists
+    
+    const scriptTag1 = `<script src="https://gklearnstudy.in/${prefix}script.js"><\/script>`;
+    const scriptTag2 = `<script src="https://gklearnstudy.in/${prefix}search.js"><\/script>`;
+    const scriptTag3 = `<script src="https://gklearnstudy.in/${prefix}${menusearchFile}"><\/script>`;
+
+    // Return all script tags combined
     return `${scriptTag1}\n${scriptTag2}\n${scriptTag3}`;
 }
 
-// Function to generate dynamic style link tag based on title
-function generatepriviewDynamicStyleTag(title) {
-    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
+// Function to generate preview dynamic style link tag
+function generatepreviewDynamicStyleTag(title) {
+    const prefix = title.includes('/') ? '../' : ''; // Add ../ if there's a slash in the title
     
-    const styleTag = `<link rel="stylesheet" href="https://gklearnstudy.in/${prefix}/style.css">`;
-    
+    const styleTag = `<link rel="stylesheet" href="https://gklearnstudy.in/${prefix}style.css">`;
+
     // Return the style tag
     return styleTag;
 }
+
         async function handleLogout() {
             try {
                 await signOut(auth);
