@@ -224,7 +224,30 @@ input[type=text] {
     const db = getFirestore(app);
 
     let currentEditPostId = null;
-let uploadedImageURL = null;
+   let imageUploadName = ""; // Variable to store image upload name
+
+        function uploadImage() {
+            const fileInput = document.getElementById('imageUpload');
+            const file = fileInput.files[0]; // Get the first file
+            
+            if (file) {
+                // Create a reference to the storage location
+                const storageRef = firebase.storage().ref(`images/${file.name}`);
+
+                // Upload the file
+                storageRef.put(file).then(snapshot => {
+                    console.log('Uploaded a blob or file!', snapshot);
+                    
+                    // Get the download URL
+                    storageRef.getDownloadURL().then(url => {
+                        imageUploadName = file.name; // Store the name of the uploaded image
+                        console.log('File available at', url);
+                    });
+                }).catch(error => {
+                    console.error('Upload failed:', error);
+                });
+            }
+        }
     document.addEventListener('DOMContentLoaded', function () {
         const logoutButton = document.getElementById('logoutButton');
         const saveDraftButton = document.createElement('button');
@@ -304,7 +327,8 @@ let uploadedImageURL = null;
                 <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                                        <meta property="og:image" content="${uploadedImageURL}">
+     <meta property="og:image" content="https://gklearnstudy.in/image/${imageUploadName}"> 
+                      
                     
                ${styleTag}
            
@@ -364,8 +388,8 @@ let uploadedImageURL = null;
                  <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                                        <meta property="og:image" content="${uploadedImageURL}">
-                    
+                       <meta property="og:image" content="https://gklearnstudy.in/image/${imageUploadName}"> 
+                      
                 
                 ${styleTag}  <!-- CSS link is placed inside the head -->
             </head>
@@ -432,8 +456,8 @@ let uploadedImageURL = null;
                     <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                     <meta name="author" content="${metaAuthor}">
-                                            <meta property="og:image" content="${uploadedImageURL}">
-                    
+                      <meta property="og:image" content="https://gklearnstudy.in/image/${imageUploadName}"> 
+                       
                     ${styleTag}
                 </head>
                 <body>
