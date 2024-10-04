@@ -299,13 +299,73 @@ input[type=text] {
                 <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
+                <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <meta name="copyright" content="© 2024 GK Learn Study">
+  <meta name="msvalidate.01" content="63D3DE99AA18A86BEC082BCA9812780E" />
+   <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${metaDescription}">
+  <meta property="og:image" content="https://gklearnstudy.in/image/${title}.png">
+  <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="${title}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+<!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${metaDescription}">
+  <meta name="twitter:image" content="https://gklearnstudy.in/image/${title}.png">
+  <meta name="twitter:site" content="@gklearnstudy">
+  <meta name="twitter:creator" content="@gklearnstudy">
+  <meta name="twitter:image:alt" content="Conversion Tools">
+
+  <!-- Additional Meta Tags -->
+  <meta property="article:section" content="Education">
+  <meta property="article:tag" content="${metaKeywords}">
+  <meta name="theme-color" content="#90EE90">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="${title}">
+  <meta name="application-name" content="${title}">
+  <meta name="msapplication-TileColor" content="#90EE90">
+  <meta name="msapplication-TileImage" content="https://gklearnstudy.in/image/${title}.png">
+  <meta name="msapplication-config" content="browserconfig.xml">
+  <meta property="youtube:channel" content="">
+  <meta property="instagram:profile" content="">
                ${styleTag}
            
             </head>
             <body>
-                <h1>${title}</h1>
+                <main class="container">
+    <form id="searchForm" onsubmit="performSearch(event);">
+      <div class="search-container">
+        <span class="search-icon" id="searchIcon">
+          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+        </span>
+        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+          oninput="updateSuggestions(event)">
+        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions-list"></div>
+    </form>
+
+    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+      <div class="modal1-content">
+        <span class="close" onclick="closeModal1(event)">&times;</span>
+        <h2>Search Results</h2>
+        <div id="results"></div>
+      </div>
+    </div>
+  </main><div class="container">
                 ${content}  
                 ${scriptTags} 
+                </div>
             </body>
             </html>
         `);
@@ -334,21 +394,59 @@ input[type=text] {
         
         // Write the HTML into the preview window with proper structure
         previewWindow.document.write(`
-        <!DOCTYPE html>
+            <!DOCTYPE html>
       <html lang="en">
-       
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>${title}</title>
-                 <meta name="description" content="${metaDescription}">
+                <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
                 <meta name="author" content="${metaAuthor}">
-                
-                ${styleTag}  <!-- CSS link is placed inside the head -->
+                <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <meta name="copyright" content="© 2024 GK Learn Study">
+  <meta name="msvalidate.01" content="63D3DE99AA18A86BEC082BCA9812780E" />
+   <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${metaDescription}">
+  <meta property="og:image" content="https://gklearnstudy.in/image/${title}.png">
+  <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="${title}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+<!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${metaDescription}">
+  <meta name="twitter:image" content="https://gklearnstudy.in/image/${title}.png">
+  <meta name="twitter:site" content="@gklearnstudy">
+  <meta name="twitter:creator" content="@gklearnstudy">
+  <meta name="twitter:image:alt" content="Conversion Tools">
+
+  <!-- Additional Meta Tags -->
+  <meta property="article:section" content="Education">
+  <meta property="article:tag" content="${metaKeywords}">
+  <meta name="theme-color" content="#90EE90">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="${title}">
+  <meta name="application-name" content="${title}">
+  <meta name="msapplication-TileColor" content="#90EE90">
+  <meta name="msapplication-TileImage" content="https://gklearnstudy.in/image/${title}.png">
+  <meta name="msapplication-config" content="browserconfig.xml">
+  <meta property="youtube:channel" content="">
+  <meta property="instagram:profile" content="">
+               ${styleTag}
+           
             </head>
             <body>
-                 <main class="container">
+                <main class="container">
     <form id="searchForm" onsubmit="performSearch(event);">
       <div class="search-container">
         <span class="search-icon" id="searchIcon">
@@ -368,9 +466,10 @@ input[type=text] {
         <div id="results"></div>
       </div>
     </div>
-  </main>
-                ${content}   <!-- Dynamic content is injected here -->
-                ${scriptTags}  <!-- Script is placed just before the closing body tag -->
+  </main><div class="container">
+                ${content}  
+                ${scriptTags} 
+                </div>
             </body>
             </html>
         `);
@@ -401,43 +500,84 @@ input[type=text] {
 
             // Raw HTML structure with dynamic variables
             const rawHTML = `
-            <!DOCTYPE html>
-              <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>${title}</title>
-                    <meta name="description" content="${metaDescription}">
+                  <!DOCTYPE html>
+      <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>${title}</title>
+                <meta name="description" content="${metaDescription}">
                 <meta name="keywords" content="${metaKeywords}">
-                    <meta name="author" content="${metaAuthor}">
-                    ${styleTag}
-                </head>
-                <body>
-                  <main class="container">
-                    <form id="searchForm" onsubmit="performSearch(event);">
-                      <div class="search-container">
-                        <span class="search-icon" id="searchIcon">
-                          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
-                        </span>
-                        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
-                          oninput="updateSuggestions(event)">
-                        <button type="button" id="searchButton"onclick="performSearch()">Search</button>
-                      </div>
-                      <div id="suggestions" class="suggestions-list"></div>
-                    </form>
+                <meta name="author" content="${metaAuthor}">
+                <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
 
-                    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
-                      <div class="modal1-content">
-                        <span class="close" onclick="closeModal1(event)">&times;</span>
-                        <h2>Search Results</h2>
-                        <div id="results"></div>
-                      </div>
-                    </div>
-                  </main>
-                  ${content}
-                  ${scriptTags}
-                </body>
-              </html>
+  <meta name="copyright" content="© 2024 GK Learn Study">
+  <meta name="msvalidate.01" content="63D3DE99AA18A86BEC082BCA9812780E" />
+   <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${metaDescription}">
+  <meta property="og:image" content="https://gklearnstudy.in/image/${title}.png">
+  <meta property="og:url" content="https://gklearnstudy.in/${title}.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="${title}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+<!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${metaDescription}">
+  <meta name="twitter:image" content="https://gklearnstudy.in/image/${title}.png">
+  <meta name="twitter:site" content="@gklearnstudy">
+  <meta name="twitter:creator" content="@gklearnstudy">
+  <meta name="twitter:image:alt" content="Conversion Tools">
+
+  <!-- Additional Meta Tags -->
+  <meta property="article:section" content="Education">
+  <meta property="article:tag" content="${metaKeywords}">
+  <meta name="theme-color" content="#90EE90">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="${title}">
+  <meta name="application-name" content="${title}">
+  <meta name="msapplication-TileColor" content="#90EE90">
+  <meta name="msapplication-TileImage" content="https://gklearnstudy.in/image/${title}.png">
+  <meta name="msapplication-config" content="browserconfig.xml">
+  <meta property="youtube:channel" content="">
+  <meta property="instagram:profile" content="">
+               ${styleTag}
+           
+            </head>
+            <body>
+                <main class="container">
+    <form id="searchForm" onsubmit="performSearch(event);">
+      <div class="search-container">
+        <span class="search-icon" id="searchIcon">
+          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+        </span>
+        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+          oninput="updateSuggestions(event)">
+        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions-list"></div>
+    </form>
+
+    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+      <div class="modal1-content">
+        <span class="close" onclick="closeModal1(event)">&times;</span>
+        <h2>Search Results</h2>
+        <div id="results"></div>
+      </div>
+    </div>
+  </main><div class="container">
+                ${content}  
+                ${scriptTags} 
+                </div>
+            </body>
+            </html>
             `;
 
             // Format the raw HTML using js-beautify
