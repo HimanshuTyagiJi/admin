@@ -779,7 +779,7 @@ input[type=text] {
 
 // Function to generate dynamic style link tag based on title
 function generateDynamicStyleTag(title) {
-    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
     
     const styleTag = `<link rel="stylesheet" href="${prefix}/style.css">`;
     
@@ -811,7 +811,7 @@ function generateDynamicTags(title) {
 
 // Function to generate dynamic style link tag based on title
 function generatepriviewDynamicStyleTag(title) {
-    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
     
     const styleTag = `<link rel="stylesheet" href="https://gklearnstudy.in/${prefix}/style.css">`;
     
