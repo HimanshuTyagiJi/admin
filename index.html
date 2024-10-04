@@ -134,7 +134,9 @@ input[type=text] {
 
         <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
         <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-     <input type="file" id="imageUpload" accept="image/*" onchange="uploadImage(event)" />
+    <input type="file" id="imageUpload" accept="image/*" onchange="uploadImage(event)" />
+ <label for="imageUpload">Upload Image:</label>
+        <input type="file" id="imageUpload" name="imageUpload" accept="image/*" required />
 
 
 
@@ -204,10 +206,11 @@ input[type=text] {
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
 
-   <script type="module">
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js"; // Added missing imports
 
     const firebaseConfig = {
         apiKey: "AIzaSyBFH1SGy9Gc7JJZhTLv2bktvTE4q_mSU3M",
@@ -221,37 +224,36 @@ input[type=text] {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-const storage = getStorage(app);
+    const storage = getStorage(app);
+
     let currentEditPostId = null;
-// Function to upload the image
-function uploadImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
 
-    const storageRef = ref(storage, 'images/' + file.name); // Store image in Firebase Storage under 'images/' folder
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    // Function to upload the image
+    function uploadImage(event) {
+        const file = event.target.files[0];
+        if (!file) return;
 
-    uploadTask.on('state_changed', 
-        (snapshot) => {
-            // Track the progress of the upload
-        }, 
-        (error) => {
-            console.error('Image upload failed:', error);
-        }, 
-        () => {
-            // Image upload successful
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
+        const storageRef = ref(storage, 'images/' + file.name); // Store image in Firebase Storage under 'images/' folder
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-                // Update the meta tag for og:image
-                document.querySelector('meta[property="og:image"]').setAttribute('content', downloadURL);
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                // Optional: Track the progress of the upload
+            }, 
+            (error) => {
+                console.error('Image upload failed:', error);
+            }, 
+            () => {
+                // Image upload successful
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    // Update the meta tag for og:image with the uploaded image URL
+                    document.querySelector('meta[property="og:image"]').setAttribute('content', downloadURL);
+                });
+            }
+        );
+    }
 
-                // Use this URL dynamically in your preview or post
-                generatepriviewDynamicScriptTags(downloadURL);  // Pass this URL to your preview function
-            });
-        }
-    );
-}
     document.addEventListener('DOMContentLoaded', function () {
         const logoutButton = document.getElementById('logoutButton');
         const saveDraftButton = document.createElement('button');
@@ -270,13 +272,12 @@ function uploadImage(event) {
         editPreviewButton.innerText = 'Preview in New Tab';
         editPreviewButton.style.display = 'none';
         document.body.appendChild(editPreviewButton);
+
         const postTitleInput = document.getElementById('postTitle');
         const metaDescriptionInput = document.getElementById('metaDescription');
         const metaKeywordsInput = document.getElementById('metaKeywords');
         const metaAuthorInput = document.getElementById('metaAuthor');
 
-
-        
         loadPosts();
 
         onAuthStateChanged(auth, (user) => {
@@ -290,8 +291,8 @@ function uploadImage(event) {
         createPostButton.addEventListener('click', function () {
             resetEditor();
             postTitleInput.style.display = 'block';
-             metaDescriptionInput.style.display = 'block';
-             metaKeywordsInput.style.display = 'block';
+            metaDescriptionInput.style.display = 'block';
+            metaKeywordsInput.style.display = 'block';
             metaAuthorInput.style.display = 'block';
            
             editorContainer.style.display = 'block';
@@ -303,123 +304,120 @@ function uploadImage(event) {
             postsContainer.style.display = 'none';
         });
 
-       previewButton.addEventListener('click', function () {
-    const content = editorContainer.innerHTML;  // Get content from the editor
-    const title = postTitleInput.value;         // Get the post title input
+        previewButton.addEventListener('click', function () {
+            const content = editorContainer.innerHTML; // Get content from the editor
+            const title = postTitleInput.value; // Get the post title input
 
-    // Check if content and title are filled in
-    if (content && title) {
-          const metaDescription = metaDescriptionInput.value;
-        const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
-        const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const imageURL = document.querySelector('meta[property="og:image"]').getAttribute('content');
+            // Check if content and title are filled in
+            if (content && title) {
+                const metaDescription = metaDescriptionInput.value;
+                const metaKeywords = metaKeywordsInput.value; // Get meta keywords input
+                const metaAuthor = metaAuthorInput.value; // Get meta author input
+                const uploadedImageURL = document.querySelector('meta[property="og:image"]').getAttribute('content'); // Get the uploaded image URL
 
-        // Generate dynamic tags (style and script)
-        const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
-        const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
+                // Generate dynamic tags (style and script)
+                const scriptTags = generatepriviewDynamicScriptTags(title); // Get script tags
+                const styleTag = generatepriviewDynamicStyleTag(title); // Get style tag
 
-        // Open the preview window
-        const previewWindow = window.open('', '_blank');
-        
-        // Write the HTML into the preview window with proper structure
-        previewWindow.document.write(`
-         <!DOCTYPE html>
-      <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${title}</title>
-                <meta name="description" content="${metaDescription}">
-                <meta name="keywords" content="${metaKeywords}">
-                <meta name="author" content="${metaAuthor}">
-                                        <meta property="og:image" content="${uploadedImageURL}">
-                    
-               ${styleTag}
-           
-            </head>
-            <body>
-                <h1>${title}</h1>
-                ${content}  
-                ${scriptTags} 
-            </body>
-            </html>
-        `);
-        
-        // Close the document stream to render the content
-        previewWindow.document.close();
-    } else {
-        alert('Please fill in the title and content to preview.');
-    }
-});
-
-
-       editPreviewButton.addEventListener('click', function () {
-    const content = editorContainer.innerHTML;  // Get content from the editor
-    const title = postTitleInput.value;         // Get the post title input
-
-    // Check if content and title are filled in
-    if (content && title) {
-        const metaKeywords = metaKeywordsInput.value;  // Get meta keywords input
-        const metaAuthor = metaAuthorInput.value;      // Get meta author input
-         const metaDescription = metaDescriptionInput.value;
-         const imageURL = document.querySelector('meta[property="og:image"]').getAttribute('content');
-
-        // Generate dynamic tags (style and script)
-        const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
-        const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
-        const previewWindow = window.open('', '_blank');
-        
-        // Write the HTML into the preview window with proper structure
-        previewWindow.document.write(`
-        <!DOCTYPE html>
-      <html lang="en">
-       
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${title}</title>
-                 <meta name="description" content="${metaDescription}">
-                <meta name="keywords" content="${metaKeywords}">
-                <meta name="author" content="${metaAuthor}">
-                                        <meta property="og:image" content="${uploadedImageURL}">
-                    
+                // Open the preview window
+                const previewWindow = window.open('', '_blank');
                 
-                ${styleTag}  <!-- CSS link is placed inside the head -->
-            </head>
-            <body>
-                 <main class="container">
-    <form id="searchForm" onsubmit="performSearch(event);">
-      <div class="search-container">
-        <span class="search-icon" id="searchIcon">
-          <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
-        </span>
-        <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
-          oninput="updateSuggestions(event)">
-        <button type="button" id="searchButton" onclick="performSearch()">Search</button>
-      </div>
-      <div id="suggestions" class="suggestions-list"></div>
-    </form>
+                // Write the HTML into the preview window with proper structure
+                previewWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${title}</title>
+                        <meta name="description" content="${metaDescription}">
+                        <meta name="keywords" content="${metaKeywords}">
+                        <meta name="author" content="${metaAuthor}">
+                        <meta property="og:image" content="${uploadedImageURL}">
+                        ${styleTag}
+                    </head>
+                    <body>
+                        <h1>${title}</h1>
+                        ${content}
+                        ${scriptTags}
+                    </body>
+                    </html>
+                `);
+                
+                // Close the document stream to render the content
+                previewWindow.document.close();
+            } else {
+                alert('Please fill in the title and content to preview.');
+            }
+        });
 
-    <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
-      <div class="modal1-content">
-        <span class="close" onclick="closeModal1(event)">&times;</span>
-        <h2>Search Results</h2>
-        <div id="results"></div>
-      </div>
-    </div>
-  </main>
-                ${content}   <!-- Dynamic content is injected here -->
-                ${scriptTags}  <!-- Script is placed just before the closing body tag -->
-            </body>
-            </html>
-        `);
-        
-        // Close the document stream to render the content
-        previewWindow.document.close();
-    } else {
-        alert('Please fill in the title and content to preview.');
-    }
-});
+        editPreviewButton.addEventListener('click', function () {
+            const content = editorContainer.innerHTML; // Get content from the editor
+            const title = postTitleInput.value; // Get the post title input
+
+            // Check if content and title are filled in
+            if (content && title) {
+                const metaKeywords = metaKeywordsInput.value; // Get meta keywords input
+                const metaAuthor = metaAuthorInput.value; // Get meta author input
+                const metaDescription = metaDescriptionInput.value;
+                const uploadedImageURL = document.querySelector('meta[property="og:image"]').getAttribute('content');
+
+                // Generate dynamic tags (style and script)
+                const scriptTags = generatepriviewDynamicScriptTags(title); // Get script tags
+                const styleTag = generatepriviewDynamicStyleTag(title); // Get style tag
+
+                const previewWindow = window.open('', '_blank');
+                
+                // Write the HTML into the preview window with proper structure
+                previewWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${title}</title>
+                        <meta name="description" content="${metaDescription}">
+                        <meta name="keywords" content="${metaKeywords}">
+                        <meta name="author" content="${metaAuthor}">
+                        <meta property="og:image" content="${uploadedImageURL}">
+                        ${styleTag} <!-- CSS link is placed inside the head -->
+                    </head>
+                    <body>
+                        <main class="container">
+                            <form id="searchForm" onsubmit="performSearch(event);">
+                                <div class="search-container">
+                                    <span class="search-icon" id="searchIcon">
+                                        <span style="display: inline-block; transform: rotate(270deg);">⌕</span>
+                                    </span>
+                                    <input type="text" id="searchInput" placeholder="Enter your search term" autocomplete="off"
+                                        oninput="updateSuggestions(event)">
+                                    <button type="button" id="searchButton" onclick="performSearch()">Search</button>
+                                </div>
+                                <div id="suggestions" class="suggestions-list"></div>
+                            </form>
+                            <div id="searchModal1" class="modal1" onclick="closeModal1(event)">
+                                <div class="modal1-content">
+                                    <span class="close" onclick="closeModal1(event)">&times;</span>
+                                    <h2>Search Results</h2>
+                                    <div id="results"></div>
+                                </div>
+                            </div>
+                        </main>
+                        ${content} <!-- Dynamic content is injected here -->
+                        ${scriptTags} <!-- Script is placed just before the closing body tag -->
+                    </body>
+                    </html>
+                `);
+                
+                // Close the document stream to render the content
+                previewWindow.document.close();
+            } else {
+                alert('Please fill in the title and content to preview.');
+            }
+        });
+    });
+
+
 
 
         function execCmd(command, value = null) {
