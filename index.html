@@ -282,8 +282,8 @@ input[type=text] {
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
         
         // Generate dynamic tags (style and script)
-        const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
-        const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
+        const scriptTags = generatepreviewDynamicScriptTags(title);  // Get script tags
+        const styleTag = generatepreviewDynamicStyleTag(title);      // Get style tag
 
         // Open the preview window
         const previewWindow = window.open('', '_blank');
@@ -388,8 +388,8 @@ input[type=text] {
         const metaAuthor = metaAuthorInput.value;      // Get meta author input
          const metaDescription = metaDescriptionInput.value;
         // Generate dynamic tags (style and script)
-        const scriptTags = generatepriviewDynamicScriptTags(title);  // Get script tags
-        const styleTag = generatepriviewDynamicStyleTag(title);      // Get style tag
+        const scriptTags = generatepreviewDynamicScriptTags(title);  // Get script tags
+        const styleTag = generatepreviewDynamicStyleTag(title);      // Get style tag
         const previewWindow = window.open('', '_blank');
         
         // Write the HTML into the preview window with proper structure
