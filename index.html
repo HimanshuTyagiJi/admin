@@ -767,7 +767,7 @@ input[type=text] {
 
        
       function generateDynamicScriptTags(title) {
-    const prefix = title.split('/').map(() => '..').join('/');  // Generate the correct prefix based on the title
+    const prefix = title.split('/').map(() => '').join('/');  // Generate the correct prefix based on the title
           
     const scriptTag1 = `<script src="${prefix}/script.js"><\/script>`;
     const scriptTag2 = `<script src="${prefix}/search.js"><\/script>`;
