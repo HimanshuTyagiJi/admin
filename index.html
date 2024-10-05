@@ -617,7 +617,7 @@ input[type=text] {
             const postTitle = postTitleInput.value;
              const metaKeywords = metaKeywordsInput.value;
             const metaAuthor = metaAuthorInput.value;
-
+ const metaDescription = metaDescriptionInput.value;
 
             if (await isTitleTaken(postTitle) && !currentEditPostId && status !== "none") {
                 alert("Post title already taken. Please choose another.");
@@ -633,7 +633,8 @@ input[type=text] {
                         userId: user.uid,
                         userName: user.displayName || user.email,
                         createdAt: new Date(), // Timestamp for sorting
-                         metaKeywords: metaKeywords,
+                        metaKeywords: metaKeywords,
+                        metaDescription: metaDescription,
                         metaAuthor: metaAuthor.split('@')[0], // Only take the part before @
                 
                     };
@@ -1046,8 +1047,7 @@ function generatepreviewDynamicStyleTag(title) {
         document.getElementById('output').value = editorContent;
     }
 
-    document.getElementById('editor').addEventListener('input', updateOutput);
-    
+   
 </script>
 <script>
 
