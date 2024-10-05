@@ -1,4 +1,276 @@
-<!DOCTYPE html>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBFH1SGy9Gc7JJZhTLv2bktvTE4q_mSU3M",
+        authDomain: "gklearnstudyy.firebaseapp.com",
+        projectId: "gklearnstudyy",
+        storageBucket: "gklearnstudyy.appspot.com",
+        messagingSenderId: "256328121620",
+        appId: "1:256328121620:web:6de8ba9ae25e83c4875601"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const loginForm = document.getElementById('loginForm');
+        const loginContainer = document.querySelector('.login-container');
+        const mainContent = document.querySelector('.main-content');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const showPasswordButton = document.getElementById('showPasswordButton');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const userCircle = document.getElementById('userCircle');
+        const logoutButton = document.getElementById('logoutButton');
+
+
+        // Function to handle login success
+        const handleLoginSuccess = (email) => {
+            loginContainer.style.display = 'none';
+            mainContent.style.display = 'block';
+            successMessage.textContent = 'Login successful!';
+            userCircle.textContent = email.charAt(0).toUpperCase();
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            localStorage.setItem('userLoggedIn', email);  // Store login state
+        };
+
+        // Check if the user is already logged in
+        const savedUser = localStorage.getItem('userLoggedIn');
+        if (savedUser) {
+            handleLoginSuccess(savedUser);  // Auto-login if user is stored
+        }
+
+        // Toggle show/hide password
+        showPasswordButton.addEventListener('click', function() {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordButton.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordButton.textContent = 'Show';
+            }
+        });
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = passwordInput.value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    handleLoginSuccess(email);  // Call login success function
+                    errorMessage.textContent = '';  // Clear any previous errors
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    let errorMessageText;
+                    if (errorCode === 'auth/wrong-password') {
+                        errorMessageText = 'Incorrect password. Please try again.';
+                    } else if (errorCode === 'auth/user-not-found') {
+                        errorMessageText = 'No user found with this email.';
+                    } else {
+                        errorMessageText = error.message;
+                    }
+                    errorMessage.textContent = errorMessageText;
+                });
+        });
+
+        // Handle forgot password
+        forgotPasswordLink.addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                errorMessage.textContent = 'Please enter your email address to reset your password.';
+                return;
+            }
+
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    successMessage.textContent = 'Password reset email sent. Check your inbox.';
+                    errorMessage.textContent = '';  // Clear error message if successful
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    if (errorCode === 'auth/user-not-found') {
+                        errorMessage.textContent = 'No user found with this email.';
+                    } else {
+                        errorMessage.textContent = error.message;
+                    }
+                });
+        });
+
+        // Handle logout
+        logoutButton.addEventListener('click', function() {
+            signOut(auth).then(() => {
+                localStorage.removeItem('userLoggedIn');  // Clear login state
+                loginContainer.style.display = 'block';  // Show login form
+                mainContent.style.display = 'none';  // Hide main content
+                userCircle.textContent = 'A';  // Reset user circle
+                successMessage.textContent = '';  // Clear success message
+            }).catch((error) => {
+                console.error("Logout failed: ", error);
+            });
+        });
+    });
+</script>
+
+</head>
+<body><div class="login-container" style="margin:10%;">
+        <h2>Login</h2>
+        <form id="loginForm" autocomplete="off">
+            <input type="email" placeholder="Email" id="email" required autocomplete="off">
+            <div class="password-container">
+                <input type="password" placeholder="Password" id="password" required autocomplete="off">
+                <button type="button" id="showPasswordButton">Show</button>
+            </div>
+            <button type="submit">Login</button>
+            <div class="error" id="errorMessage"></div>
+            <div class="success" id="successMessage"></div>
+            <div class="forgot-password">
+                <a id="forgotPasswordLink">Forgot Password?</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="main-content"> 
+
+    <!-- Main Content -->
+    <div class="header">
+        <button id="createPostButton">Create Post</button>
+        <div class="user-dropdown">
+            <!-- User Circle with Initial -->
+            <div class="user-circle" id="userCircle">A</div>
+            <!-- User Dropdown -->
+            <div class="user-dropdown-content">
+                <a href="#" id="logoutButton">Logout</a>
+            </div>
+       
+    </div>
+    </div>
+
+    <div class="admin-container">
+       
+
+        <!-- Title Input -->
+        <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
+         <input type="text" id="metaDescription" placeholder="Enter Description" style="display: none;" />
+
+        <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
+        <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
+
+
+        <!-- Toolbar for formatting -->
+        <div id="toolbar" style="display: none;">
+          <div style="display:flex";>
+                    <button onclick="execCmd('bold')">B</button>
+                    <button onclick="execCmd('italic')">I</button>
+                    <button onclick="execCmd('underline')">U</button>
+                    <button onclick="execCmd('justifyLeft')">L</button>
+                    <button onclick="execCmd('justifyCenter')">C</button>
+                    <button onclick="execCmd('justifyRight')">R</button>
+                    <button onclick="execCmd('insertOrderedList')">OL</button>
+                        <button onclick="createList('insertOrderedList', 'upper-alpha')">UAL</button>
+                        <button onclick="createList('insertOrderedList', 'lower-alpha')">LAL</button>
+                        <button onclick="createList('insertOrderedList', 'upper-roman')">URL</button>
+                        <button onclick="createList('insertOrderedList', 'lower-roman')">LRL</button>
+                        <button onclick="createList('insertUnorderedList', 'disc')">DBL</button>
+                        <button onclick="createList('insertUnorderedList', 'circle')">CBL</button>
+                        <button onclick="createList('insertUnorderedList', 'square')">SBL</button>
+                        
+                        <!-- Corrected button for disc list -->
+                        <button onclick="execCmd('insertUnorderedList', 'disc')">DL</button>
+                        
+                    <button onclick="execCmd('superscript')">x<sup>2</sup></button>
+                    <button onclick="execCmd('subscript')">x<sub>2</sub></button>
+                    <button onclick="insertTable()">Table</button>
+                    <button onclick="insertContentDiv1()"><div class="color-content1">H1</div></button>
+                    <button onclick="insertContentDiv2()"><div class="color-content1">H2</div></button>
+                    <button onclick="insertContentDiv3()"><div class="color-content2">CH2</div></button>
+                    <button onclick="insertPC3()"><div class="color-content3">P</div></button>
+                    <button onclick="insertPC4()"><div class="color-content4">PB</div></button>
+                    <button onclick="insertPC5()"><div class="color-content5">T</div></button>
+                    <button onclick="insertPC6()"><div class="color-content6">OT</div></button>
+                    <button onclick="insertPC6()"><div class="color-content6">TH</div></button>
+                    <button onclick="insertPC7()"><div class="color-content7">TTL</div></button>
+                    <button onclick="insertPC8()"><div class="color-content8">TTP</div></button>
+                    <button onclick="insertPEXC()"><div class="color-content9">Example</div></button>
+                    <button onclick="insertOLC()"><div class="color-content5">OL</div></button>
+                    <button onclick="insertUOLC()"><div class="color-content5">UL</div> </button>
+                    <button onclick="insertBGCC1()"><div class="pink-background">BP</div></button>
+                    <button onclick="insertBGCC2()"><div class="blue-background">BB</div></button>
+                    <button onclick="insertBGCC3()"><div class="blue1-background">BB1</div></button>
+                    <button onclick="insertBGCC4()"><div class="green-background">BG</div></button>
+                    <button onclick="insertBGCC5()"><div class="yellow-background">BY</div></button>
+                    <button onclick="insertBGCC6()"><div class="orange-background">BO</div></button>
+                    <button onclick="insertCR()">C/R</button>
+                    <button onclick="insertCR1()">C/R1</button>
+                        <button onclick="insertLineBreaks()">One Line Break</button>
+                          
+                                   
+                    </button></div>
+        </div>
+
+        <!-- Content editor -->
+        <div contenteditable="true" id="postContent" style="text-align:left;margin:5px; padding: 10px; border: 1px solid #ddd; min-height: 150px; margin-top: 10px; display: none;"></div>
+
+        <!-- Generated HTML Display -->
+        <div id="generatedHTML" class="generatedHTML" style="display: none;"></div>
+
+        <!-- Buttons -->
+        <button id="submitPost" style="display: none;">Submit Post</button>
+        <button id="previewPost" style="display: none;">Preview in New Tab</button>
+
+        <!-- Posts Display -->
+        <div id="posts" class="posts"></div>
+    </div>
+    </div>
+    
+    
+    <script type="module"> document.addEventListener("DOMContentLoaded", function () {
+            const loginForm = document.getElementById('loginForm');
+            const loginContainer = document.querySelector('.login-container');
+            const mainContent = document.querySelector('.main-content');
+            const postList = document.getElementById('postList');
+            const postInput = document.getElementById('postInput');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const addPostButton = document.getElementById('addPostButton');
+            
+            // Handle Login
+            loginForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+    
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        loginContainer.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        fetchPosts();  // Fetch posts when logged in
+                        errorMessage.textContent = '';
+                    })
+                    .catch((error) => {
+                        errorMessage.textContent = error.message;
+                    });
+            });
+            // Handle Logout
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                signOut(auth).then(() => {
+                    loginContainer.style.display = 'block';
+                    mainContent.style.display = 'none';
+                    postList.innerHTML = '';  // Clear posts on logout
+                }).catch((error) => {
+                    errorMessage.textContent = error.message;
+                });
+            });
+        });
+    </script>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,11 +282,121 @@
         body {
             font-family: Arial, sans-serif;
            
+          
+        }   .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            display: block;
+        }
+        h2 {
+            text-align: center;
+        }
+      
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-container input {
+            width: calc(100% - 50px);
+        }
+        .password-container button {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            color: #007bff;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error, .success {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .forgot-password a {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        .main-content {
+            display: none; /* Initially hidden */
+        }
+       
+       
+
+
+        /* User circle styles */
+        .user-circle {margin-top: 10px;
+            width: 35px;
+            height: 35px;
+            background-color: #f0f0f0;
+            color: #007bff;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            flex-direction: column;
-            margin: 0;
+            align-items: center;
+            font-weight: bold;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* Right side dropdown styles */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            min-width: 100px;
+        }
+
+        .user-dropdown-content a {
+            color: black;
+            padding: 15px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .user-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+
+        /* Main content */
+        .content {
+            padding: 20px;
         }
         .header {
             width: 98%;
@@ -26,10 +408,10 @@
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: fixed;
-            top: -5px;
+            top: -10px;
             left: 0;
            
-        } #themeToggle {z-index: 11;position: fixed;top: 12px;right: 100px;padding: 0px 0px;border: none;cursor: pointer;border-radius: 50%;font-size: 16px;display: flex;align-items: center;gap: 10px;}
+        } #themeToggle {z-index: 11;position: fixed;top: 8px;right: 100px;padding: 0px 0px;border: none;cursor: pointer;border-radius: 50%;font-size: 16px;display: flex;align-items: center;gap: 10px;}
 
         .header button {
             padding: 10px 15px;
@@ -115,91 +497,12 @@ input[type=text] {
         
      [data-theme="dark"] {#toolbar button {color:white;
           
-        }
+        }}
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <button id="createPostButton">Create Post</button>
-        <button style="margin-left: 52%;" id="logoutButton">Logout</button>
-    </div>
-
-    <div class="admin-container">
-       
-
-        <!-- Title Input -->
-        <input type="text" id="postTitle" placeholder="Enter Post Title" style="display: none;" />
-         <input type="text" id="metaDescription" placeholder="Enter Description" style="display: none;" />
-
-        <input type="text" id="metaKeywords" placeholder="Enter Keywords (comma separated)" style="display: none;" />
-        <input type="text" id="metaAuthor" placeholder="Enter Author Name" style="display: none;" />
-
-
-        <!-- Toolbar for formatting -->
-        <div id="toolbar" style="display: none;">
-          <div style="display:flex";>
-                    <button onclick="execCmd('bold')">B</button>
-                    <button onclick="execCmd('italic')">I</button>
-                    <button onclick="execCmd('underline')">U</button>
-                    <button onclick="execCmd('justifyLeft')">L</button>
-                    <button onclick="execCmd('justifyCenter')">C</button>
-                    <button onclick="execCmd('justifyRight')">R</button>
-                    <button onclick="execCmd('insertOrderedList')">OL</button>
-                        <button onclick="createList('insertOrderedList', 'upper-alpha')">UAL</button>
-                        <button onclick="createList('insertOrderedList', 'lower-alpha')">LAL</button>
-                        <button onclick="createList('insertOrderedList', 'upper-roman')">URL</button>
-                        <button onclick="createList('insertOrderedList', 'lower-roman')">LRL</button>
-                        <button onclick="createList('insertUnorderedList', 'disc')">DBL</button>
-                        <button onclick="createList('insertUnorderedList', 'circle')">CBL</button>
-                        <button onclick="createList('insertUnorderedList', 'square')">SBL</button>
-                        
-                        <!-- Corrected button for disc list -->
-                        <button onclick="execCmd('insertUnorderedList', 'disc')">DL</button>
-                        
-                    <button onclick="execCmd('superscript')">x<sup>2</sup></button>
-                    <button onclick="execCmd('subscript')">x<sub>2</sub></button>
-                    <button onclick="insertTable()">Table</button>
-                    <button onclick="insertContentDiv1()"><div class="color-content1">H1</div></button>
-                    <button onclick="insertContentDiv2()"><div class="color-content1">H2</div></button>
-                    <button onclick="insertContentDiv3()"><div class="color-content2">CH2</div></button>
-                    <button onclick="insertPC3()"><div class="color-content3">P</div></button>
-                    <button onclick="insertPC4()"><div class="color-content4">PB</div></button>
-                    <button onclick="insertPC5()"><div class="color-content5">T</div></button>
-                    <button onclick="insertPC6()"><div class="color-content6">OT</div></button>
-                    <button onclick="insertPC6()"><div class="color-content6">TH</div></button>
-                    <button onclick="insertPC7()"><div class="color-content7">TTL</div></button>
-                    <button onclick="insertPC8()"><div class="color-content8">TTP</div></button>
-                    <button onclick="insertPEXC()"><div class="color-content9">Example</div></button>
-                    <button onclick="insertOLC()"><div class="color-content5">OL</div></button>
-                    <button onclick="insertUOLC()"><div class="color-content5">UL</div> </button>
-                    <button onclick="insertBGCC1()"><div class="pink-background">BP</div></button>
-                    <button onclick="insertBGCC2()"><div class="blue-background">BB</div></button>
-                    <button onclick="insertBGCC3()"><div class="blue1-background">BB1</div></button>
-                    <button onclick="insertBGCC4()"><div class="green-background">BG</div></button>
-                    <button onclick="insertBGCC5()"><div class="yellow-background">BY</div></button>
-                    <button onclick="insertBGCC6()"><div class="orange-background">BO</div></button>
-                    <button onclick="insertCR()">C/R</button>
-                    <button onclick="insertCR1()">C/R1</button>
-                        <button onclick="insertLineBreaks()">One Line Break</button>
-                          
-                                   
-                    </button></div>
-        </div>
-
-        <!-- Content editor -->
-        <div contenteditable="true" id="postContent" style="text-align:left;margin:5px; padding: 10px; border: 1px solid #ddd; min-height: 150px; margin-top: 10px; display: none;"></div>
-
-        <!-- Generated HTML Display -->
-        <div id="generatedHTML" class="generatedHTML" style="display: none;"></div>
-
-        <!-- Buttons -->
-        <button id="submitPost" style="display: none;">Submit Post</button>
-        <button id="previewPost" style="display: none;">Preview in New Tab</button>
-
-        <!-- Posts Display -->
-        <div id="posts" class="posts"></div>
-    </div>
+   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
 
    <script type="module">
@@ -247,14 +550,8 @@ input[type=text] {
 
         loadPosts();
 
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-            }
-        });
-
-        logoutButton.addEventListener('click', handleLogout);
-
+     
+       
         createPostButton.addEventListener('click', function () {
             resetEditor();
             postTitleInput.style.display = 'block';
@@ -768,7 +1065,7 @@ input[type=text] {
 
         async function handleLogout() {
             await signOut(auth);
-            window.location.href = 'login.html';
+            window.location.href = '';
         }
 
    function generateDynamicScriptTags(title) {
@@ -851,14 +1148,7 @@ function generatepreviewDynamicStyleTag(title) {
     return styleTag;
 }
 
-        async function handleLogout() {
-            try {
-                await signOut(auth);
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error("Error logging out: ", error);
-            }
-        }
+        
     });
 </script>
 
