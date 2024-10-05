@@ -703,31 +703,28 @@ input[type=text] {
                     const editButton = document.createElement('button');
                     editButton.innerText = 'Edit';
                     editButton.onclick = function () {
-                        currentEditPostId = doc.id;
-                        postTitleInput.value = post.title;
-                         metaKeywordsInput.style.display = 'block';
-                         metaAuthorInput.style.display = 'block';
-           metaDescription.style.display = 'block';
-       
-                        editorContainer.innerHTML = post.content;
-                        postTitleInput.style.display = 'block';
-                        editorContainer.style.display = 'block';
-                        submitButton.style.display = 'inline-block';
-                        saveDraftButton.style.display = 'inline-block';
-                        editPreviewButton.style.display = 'inline-block';
-                        previewButton.style.display = 'none';
-                        postsContainer.style.display = 'none';
-                        document.getElementById('toolbar').style.display = 'block';
-                    };
+                 currentEditPostId = doc.id;
+                postTitleInput.value = post.title;
+                metaKeywordsInput.value = post.metaKeywords || '';   // Load meta keywords into input
+                metaAuthorInput.value = post.metaAuthor || '';       // Load meta author into input
+                metaDescriptionInput.value = post.metaDescription || '';  // Load meta description into input
+                editorContainer.innerHTML = post.content;
+
+                postTitleInput.style.display = 'block';
+                metaKeywordsInput.style.display = 'block';
+                metaAuthorInput.style.display = 'block';
+                metaDescriptionInput.style.display = 'block';
+                editorContainer.style.display = 'block';
+                submitButton.style.display = 'inline-block';
+                saveDraftButton.style.display = 'inline-block';
+                previewButton.style.display = 'none';
+                postsContainer.style.display = 'none';
+                document.getElementById('toolbar').style.display = 'block';
+            };
 
                     postElement.innerHTML = 
                         `<h3>${post.title}</h3>
-                        <p>Description: ${post.metaDescription || 'No description'}</p>
-                
-                         <p>Keywords: ${post.metaKeywords || 'None'}</p>  
-                        <p>Author: ${post.metaAuthor || 'Unknown'}</p>   
-                        <postcontent>${post.content}</postcontent>
-                        
+                       
                         <status>Status: ${post.status === "none" ? "Draft" : post.status}</status>
                         `; 
                     postElement.appendChild(previewButton);
