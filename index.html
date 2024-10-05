@@ -120,12 +120,12 @@
 </script>
 
 </head>
-<body><div class="login-container" style="margin:10%;">
+<body><div class="login-container" style="position: absolute;left: 50%;top: 45%;transform: translate(-50%, -50%);">
         <h2>Login</h2>
-        <form id="loginForm" autocomplete="off">
-            <input type="email" placeholder="Email" id="email" required autocomplete="off">
+        <form id="loginForm" autocomplete="off" >
+            <input type="email" placeholder="Email" id="email" required autocomplete="off"style="width: 100%;">
             <div class="password-container">
-                <input type="password" placeholder="Password" id="password" required autocomplete="off">
+                <input type="password" placeholder="Password" id="password" required autocomplete="off"style="width: 100%;">
                 <button type="button" id="showPasswordButton">Show</button>
             </div>
             <button type="submit">Login</button>
@@ -303,9 +303,9 @@
         .password-container input {
             width: calc(100% - 50px);
         }
-        .password-container button {
+        .password-container button {margin-top:0px;
             position: absolute;
-            right: 10px;
+            right: 0px;
             background: none;
             border: none;
             cursor: pointer;
@@ -321,8 +321,8 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        button[type="submit"]:hover {
-            background-color: #0056b3;
+        .password-container button:hover, button[type="submit"]:hover {
+            background-color: #0056b3;color:#ddd;
         }
         .error, .success {
             color: red;
@@ -346,10 +346,16 @@
         }
        
        
-
+        input {
+          
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
 
         /* User circle styles */
-        .user-circle {margin-top: 10px;
+        .user-circle {margin-top: 10px;margin-right:20px;
             width: 35px;
             height: 35px;
             background-color: #f0f0f0;
